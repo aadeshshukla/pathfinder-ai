@@ -54,8 +54,8 @@ export default function PathfinderMVP() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-2xl space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 flex justify-center items-center">
+      <div className="w-full max-w-xl px-4 py-12">
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -50 }} transition={{ duration: 0.5 }}>
@@ -91,6 +91,7 @@ export default function PathfinderMVP() {
     </div>
   );
 }
+
 
 
 
