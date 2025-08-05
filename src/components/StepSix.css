@@ -1,0 +1,50 @@
+.step-six-container {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .step-six-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .step-six-container label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  .step-six-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .btn-group button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-group button:first-child {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  .back-btn {
+    background-color: #ddd;
+  }
+  

@@ -1,0 +1,27 @@
+.step-three {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .step-three h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .step-three p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .step-three button {
+    background: #16a34a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
