@@ -1,37 +1,49 @@
-// src/components/StepFour.jsx
 import React from 'react';
-import './StepBase.css';
+import './StepFour.css';
+import { motion } from 'framer-motion';
 
-export default function StepFour({ sortedNodes = [], edges = [], onNext }) {
+export default function StepFour({ nodes, sortedNodes, onNext }) {
   return (
     <div className="step-container">
-      <h2>Step 4 — Your Learning Roadmap</h2>
-
-      {sortedNodes.length === 0 ? (
-        <p className="small-muted">No ordered roadmap available yet. Add resources and relationships (admin) to build one.</p>
-      ) : (
-        <>
-          <div style={{ marginTop: 8, marginBottom: 12, textAlign: 'left' }}>
-            <p className="small-muted">Ordered sequence of learning resources (topological order):</p>
-          </div>
-
-          {sortedNodes.map((n, idx) => (
-            <div key={n.id} className="node-card">
-              <h3>{idx + 1}. {n.title}</h3>
-              {n.description && <p>{n.description}</p>}
-              {n.link && <p style={{ marginTop: 8 }}><a href={n.link} target="_blank" rel="noreferrer">Open resource ↗</a></p>}
-              {n.estimated_time && <p className="small-muted" style={{ marginTop: 8 }}>⏱ {n.estimated_time}</p>}
-            </div>
+      <h2>Your Learning Roadmap</h2>
+      <div className="roadmap-container">
+        <ul className="timeline">
+          {sortedNodes.map((node, index) => (
+            <motion.li
+              key={node.id}
+              className="timeline-item"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.15, duration: 0.4 }}
+            >
+              <div className="timeline-marker">{index + 1}</div>
+              <div className="timeline-content">
+                <h3>{node.title}</h3>
+                {node.description && <p>{node.description}</p>}
+                {node.link && (
+                  <p>
+                    <a
+                      href={node.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit Resource →
+                    </a>
+                  </p>
+                )}
+              </div>
+            </motion.li>
           ))}
-        </>
-      )}
-
-      <div style={{ marginTop: 12 }}>
-        <button onClick={onNext}>Next →</button>
+        </ul>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <button onClick={onNext}>Continue</button>
       </div>
     </div>
   );
 }
+
+
 
 
 
