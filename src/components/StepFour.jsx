@@ -1,24 +1,37 @@
 import React from 'react';
-import './StepFour.css';
+import './StepBase.css';
 
-export default function StepFour({ goal, sortedNodes, onAddNew }) {
+export default function StepFour({ nodes, edges, onNext }) {
+  // Create a quick map for node lookup
+  const nodeMap = nodes.reduce((map, node) => {
+    map[node.id] = node;
+    return map;
+  }, {});
+
   return (
-    <div className="step-four">
-      <h2>Step 4: Your Personalized Path 📍</h2>
-      {sortedNodes.length === 0 ? (
-        <p>No resources found or missing prerequisites.</p>
+    <div className="step-container">
+      <h2 className="step-title">Your Learning Roadmap</h2>
+      
+      {edges.length === 0 ? (
+        <p>No roadmap data available. Please add edges in Step 6 (Admin).</p>
       ) : (
-        sortedNodes.map((step, i) => (
-          <div className="step-card" key={i}>
-            <h3>{step.title}</h3>
-            <p>{step.description}</p>
-            <a href={step.link} target="_blank" rel="noreferrer">Visit Resource ↗</a>
-            <p>⏱ {step.estimated_time}</p>
-          </div>
-        ))
+        <ul className="roadmap-list">
+          {edges.map((edge) => (
+            <li key={edge.id} className="roadmap-item">
+              <strong>{nodeMap[edge.from_node_id]?.title || 'Unknown'}</strong> 
+              <span style={{ margin: '0 8px' }}>→</span> 
+              {nodeMap[edge.to_node_id]?.title || 'Unknown'}
+            </li>
+          ))}
+        </ul>
       )}
-      <button onClick={onAddNew}>➕ Add a new resource</button>
+
+      <button className="next-btn" onClick={onNext}>
+        Next
+      </button>
     </div>
   );
 }
+
+
 

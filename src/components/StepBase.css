@@ -1,0 +1,93 @@
+.step-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .step-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #2563eb;
+  }
+  
+  .step-container input,
+  .step-container select,
+  .step-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  .step-container button {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .step-container button:hover {
+    background-color: #1e4bb8;
+  }
+  
+  .node-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+    border: 1px solid #eee;
+  }
+  
+  .node-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .node-card p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  /* progress bar styles (add near the bottom of StepBase.css) */
+.progress-wrapper {
+    width: 100%;
+    background-color: #e5e7eb;
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: #2563eb;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+  }
+  .roadmap-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .roadmap-item {
+    padding: 8px 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+   
+  

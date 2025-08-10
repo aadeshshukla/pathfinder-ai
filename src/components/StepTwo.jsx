@@ -1,27 +1,27 @@
 import React from 'react';
-import './StepTwo.css';
+import './StepBase.css';
 
-export default function StepTwo({ context, setContext, onNext }) {
+export default function StepTwo({ skillLevel, setSkillLevel, timePerWeek, setTimePerWeek, onNext }) {
   return (
-    <div className="step-two">
-      <h2>Step 2: Tell us about yourself 🧠</h2>
+    <div className="step-container">
+      <h2>Step 2: Your Current Skills & Availability</h2>
+      <select value={skillLevel} onChange={(e) => setSkillLevel(e.target.value)}>
+        <option value="">Select Skill Level</option>
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+      </select>
+
       <input
-        placeholder="Your skill level"
-        value={context.level}
-        onChange={(e) => setContext({ ...context, level: e.target.value })}
+        type="number"
+        placeholder="Hours available per week"
+        value={timePerWeek}
+        onChange={(e) => setTimePerWeek(e.target.value)}
       />
-      <input
-        placeholder="Time per week"
-        value={context.time}
-        onChange={(e) => setContext({ ...context, time: e.target.value })}
-      />
-      <input
-        placeholder="Preferred content (e.g. videos, books)"
-        value={context.preference}
-        onChange={(e) => setContext({ ...context, preference: e.target.value })}
-      />
-      <button onClick={onNext}>Generate Path →</button>
+
+      <button onClick={onNext}>Next →</button>
     </div>
   );
 }
+
 

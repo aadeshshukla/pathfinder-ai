@@ -1,13 +1,14 @@
 import React from 'react';
-import './StepThree.css';
+import './StepBase.css';
 
 export default function StepThree({ onNext }) {
   return (
-    <div className="step-three">
-      <h2>Step 3: Mapping your journey... ⚙️</h2>
-      <p>Analyzing your inputs and curating resources...</p>
-      <button onClick={onNext}>Show Path →</button>
+    <div className="step-container">
+      <h2>Step 3: Generating Your Learning Plan...</h2>
+      <p>Please wait while we prepare your personalized roadmap.</p>
+      <button onClick={onNext}>View Roadmap →</button>
     </div>
   );
 }
+
 

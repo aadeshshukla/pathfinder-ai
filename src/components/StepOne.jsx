@@ -1,5 +1,5 @@
 import React from 'react';
-import './StepOne.css';
+import './StepBase.css';
 
 export default function StepOne({ goal, setGoal, onNext }) {
   return (
