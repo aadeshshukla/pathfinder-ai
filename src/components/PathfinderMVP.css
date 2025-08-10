@@ -1,21 +1,23 @@
+/* src/components/PathfinderMVP.css */
 .app-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .back-btn {
-    margin-top: 20px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .back-btn:hover {
-    background: #1e4bb8;
-  }
+  width: 100%;
+  padding: 28px 12px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f8fafc, #ffffff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-btn {
+  margin-top: 18px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #64748b;
+  color: white;
+}
+
   
