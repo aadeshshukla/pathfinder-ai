@@ -1,6 +1,6 @@
-import React from 'react';
-import './StepFour.css';
-import { motion } from 'framer-motion';
+import React from "react";
+import "./StepFour.css";
+import { motion } from "framer-motion";
 
 export default function StepFour({ nodes, sortedNodes, onNext }) {
   return (
@@ -19,7 +19,9 @@ export default function StepFour({ nodes, sortedNodes, onNext }) {
               <div className="timeline-marker">{index + 1}</div>
               <div className="timeline-content">
                 <h3>{node.title}</h3>
-                {node.description && <p>{node.description}</p>}
+                {node.description && (
+                  <p className="small-muted">{node.description}</p>
+                )}
                 {node.link && (
                   <p>
                     <a
@@ -36,12 +38,13 @@ export default function StepFour({ nodes, sortedNodes, onNext }) {
           ))}
         </ul>
       </div>
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
         <button onClick={onNext}>Continue</button>
       </div>
     </div>
   );
 }
+
 
 
 

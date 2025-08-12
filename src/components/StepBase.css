@@ -1,85 +1,119 @@
 /* src/components/StepBase.css */
+
+:root {
+  --primary-color: #4f46e5;
+  --primary-color-hover: #4338ca;
+  --secondary-color: #10b981;
+  --secondary-color-hover: #059669;
+  --border-color: #e2e8f0;
+  --input-bg-color: #f8fafc;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+}
+
 .step-container {
+  width: 100%;
   max-width: 760px;
   margin: 0 auto;
-  padding: 28px;
+  padding: 32px 36px;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(16,24,40,0.06);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   text-align: center;
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-family: 'Inter', sans-serif;
 }
 
 .step-container h2 {
-  font-size: 1.4rem;
-  margin-bottom: 12px;
-  color: #0f172a;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--text-primary);
 }
 
 .step-container input,
 .step-container select,
 .step-container textarea {
   width: 100%;
-  padding: 10px 12px;
-  margin-top: 10px;
-  margin-bottom: 14px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
   border-radius: 8px;
-  border: 1px solid #e6e9ef;
+  border: 1px solid var(--border-color);
   font-size: 1rem;
   box-sizing: border-box;
+  background-color: var(--input-bg-color);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.step-container input:focus,
+.step-container select:focus,
+.step-container textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
 .step-container textarea {
-  min-height: 90px;
+  min-height: 100px;
   resize: vertical;
 }
 
 .step-container button {
-  background-color: #2563eb;
+  background-color: var(--primary-color);
   color: white;
-  padding: 10px 16px;
+  padding: 12px 20px;
   font-size: 1rem;
+  font-weight: 500;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.step-container button:hover {
+  background-color: var(--primary-color-hover);
+  transform: translateY(-2px);
 }
 
 .step-container button.secondary {
-  background: #10b981;
+  background: var(--secondary-color);
 }
 
-.node-card {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 12px;
-  text-align: left;
-  border: 1px solid #f1f5f9;
+.step-container button.secondary:hover {
+  background: var(--secondary-color-hover);
 }
 
-.node-card h3 { margin: 0 0 8px 0; font-size: 1.05rem; color: #0f172a; }
-.node-card p { margin: 0; color: #475569; font-size: .95rem; }
-
-/* progress */
+/* Progress Bar */
 .progress-wrapper {
   width: 100%;
-  background-color: #eef2ff;
+  max-width: 760px;
+  background-color: #e0e7ff;
   border-radius: 999px;
-  height: 10px;
+  height: 8px;
   overflow: hidden;
-  margin-bottom: 14px;
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #2563eb;
+  background-color: var(--primary-color);
   width: 0%;
-  transition: width 0.32s ease-in-out;
+  transition: width 0.4s ease-in-out;
 }
 
-/* header / small */
-.app-header { max-width:760px; margin: 18px auto; padding: 0 12px; display:flex; justify-content:space-between; align-items:center; }
-.small-muted { color: #64748b; font-size: 0.95rem; }
+.app-header {
+  width: 100%;
+  max-width: 760px;
+  padding: 0 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
 
-   
-  
+.small-muted {
+  color: #64748b;
+  font-size: 0.9rem;
+}
