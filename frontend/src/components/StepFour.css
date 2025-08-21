@@ -1,84 +1,87 @@
 .roadmap-container {
-    margin-top: 24px;
-  }
-  
-  .timeline {
-    position: relative;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 5px;
-    bottom: 5px;
-    width: 3px;
-    background: #e0e7ff;
-    border-radius: 2px;
-  }
-  
-  .timeline-item {
-    position: relative;
-    margin-bottom: 24px;
-    padding-left: 50px;
-  }
-  
-  .timeline-marker {
-    position: absolute;
-    left: 5px;
-    top: 5px;
-    background: white;
-    border: 3px solid var(--primary-color);
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    z-index: 1;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .timeline-item:hover .timeline-marker {
-    transform: scale(1.2);
-  }
-  
-  .timeline-content {
-    background: #f8fafc;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: 1px solid #f1f5f9;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  }
-  
-  .timeline-item:hover .timeline-content {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-  }
-  
-  .timeline-content h3 {
-    margin: 0 0 4px 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-  
-  .timeline-content p {
-    margin: 0 0 10px 0;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-  
-  .timeline-content a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .timeline-content a:hover {
-    text-decoration: underline;
-  }
+  text-align: left;
+}
+
+.roadmap-intro {
+  font-style: italic;
+  margin-bottom: 2rem;
+  color: #888;
+}
+
+.module-card {
+  background-color: #2a2a3a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.module-card h3 {
+  color: #a67dff;
+  margin-top: 0;
+  border-bottom: 2px solid #a67dff;
+  padding-bottom: 0.5rem;
+}
+
+.module-duration {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.module-description {
+    font-size: 1em;
+    color: #ddd;
+}
+
+.topic-card {
+  background-color: #333344;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.topic-card h4 {
+  margin-top: 0;
+  color: #eee;
+}
+
+.resource-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.resource-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.resource-list a {
+  color: #8cb4ff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.resource-list a:hover {
+  color: #c4daff;
+  text-decoration: underline;
+}
+
+.resource-type {
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-right: 10px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.resource-video { background-color: #c7342d; }
+.resource-article { background-color: #2d8ac7; }
+.resource-book { background-color: #c78f2d; }
+.resource-course { background-color: #2dc773; }
+.resource-documentation { background-color: #7d7d7d; }
   
   
   

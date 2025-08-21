@@ -7,12 +7,11 @@ import StepTwo from './components/StepTwo';
 import StepThree from './components/StepThree';
 import StepFour from './components/StepFour';
 import StepFive from './components/StepFive';
-import StepSix from './components/stepSix';
+import StepSix from './components/StepSix'; // Corrected component name from stepSix to StepSix
 import ProgressBar from './components/progressBar';
 
 import './components/PathfinderMVP.css';
 import './components/StepBase.css';
-
 
 import { supabase } from './supabase';
 import { buildGraph, topologicalSort } from './utils/graphUtils';
@@ -25,12 +24,15 @@ export default function PathfinderMVP() {
 
   // --- user inputs / context
   const [goal, setGoal] = useState('');
-  const [context, setContext] = useState({ level: '', time: '', preference: '' });
+  const [context, setContext] = useState({ level: 'Beginner', time: '5', preference: 'Balanced' });
 
   // --- graph data
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [loadingGraph, setLoadingGraph] = useState(false);
+
+  // --- NEW: State for AI-generated roadmap
+  const [roadmapData, setRoadmapData] = useState(null);
 
   // ---------- Data fetching / mutations ----------
   const fetchGraphData = async () => {
@@ -58,6 +60,12 @@ export default function PathfinderMVP() {
     fetchGraphData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  // --- NEW: Handler for receiving the generated roadmap from StepThree
+  const handleRoadmapGeneration = (data) => {
+    setRoadmapData(data);
+  };
+
 
   // Insert a new node (payload must match nodes table columns)
   const addNode = async (payload) => {
@@ -180,20 +188,37 @@ export default function PathfinderMVP() {
 
         {step === 3 && (
           <motion.div key="s3" {...motionProps}>
-            <StepThree onNext={() => setStep(4)} onBack={goBack} />
+            {/* UPDATED: Pass combined form data and handlers to StepThree */}
+            <StepThree
+              formData={{
+                goal: goal,
+                experience: context.level,
+                timeCommitment: context.time,
+                learningStyle: context.preference,
+                access: 'Free', // Assuming free for now, can be added to form later
+              }}
+              onNext={goNext}
+              onPrevious={goBack}
+              onRoadmapGeneration={handleRoadmapGeneration}
+            />
           </motion.div>
         )}
 
         {step === 4 && (
           <motion.div key="s4" {...motionProps}>
+             {/* UPDATED: Pass AI-generated roadmap data to StepFour */}
             <StepFour
+              roadmapData={roadmapData}
+              onPrevious={goBack}
+              // The props below are kept in case you want to switch back
+              // to showing the graph for admin users, for example.
               nodes={nodes}
               edges={edges}
               sortedNodes={sortedNodes}
               onNext={() => {
                 if (isAdmin) setStep(5);
                 else {
-                  // final user flow — show a friendly message (replace with a proper completion page if you want)
+                  // final user flow — show a friendly message
                   alert('You have reached the end of this roadmap!');
                 }
               }}
@@ -225,7 +250,7 @@ export default function PathfinderMVP() {
       </AnimatePresence>
 
       {/* Back button footer */}
-      {step > 1 && (
+      {step > 1 && !isAdmin && (
         <div style={{ marginTop: 20, textAlign: 'center' }}>
           <button className="back-btn" onClick={goBack}>
             ← Back

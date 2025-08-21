@@ -1,39 +1,41 @@
-// Adapter to call AI provider APIs
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// backend/src/ai/modelAdapter.js
 
-const DEFAULT_MODEL = process.env.MODEL_NAME || "gemini-1.5-pro";
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-function getModel() {
-  if (!process.env.GOOGLE_API_KEY) {
-    throw new Error("GOOGLE_API_KEY missing in environment");
+// Create a variable to hold the model, but don't initialize it yet.
+let model;
+
+/**
+ * Initializes and returns the Generative AI model.
+ * This function ensures the API key is loaded from the environment before the client is created.
+ */
+export const getModel = () => {
+  // Only initialize the model if it hasn't been already.
+  if (!model) {
+    // Check if the API key exists. If not, throw a clear error.
+    if (!process.env.GOOGLE_API_KEY) {
+      throw new Error('GOOGLE_API_KEY is missing in the environment. Please check your .env file.');
+    }
+    
+    // Now that we've confirmed the key is loaded, create the client.
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
   }
-  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-  // Use systemInstruction + JSON-only response
-  return genAI.getGenerativeModel({
-    model: DEFAULT_MODEL,
-    systemInstruction:
-      "You are Pathfinder AI. You must return ONLY valid JSON with no markdown or commentary.",
-  });
-}
+  
+  return model;
+};
 
-export async function callGeminiJSON({ prompt }) {
-  const model = getModel();
-  const generationConfig = {
-    temperature: 0.2,
-    maxOutputTokens: 1500,
-    // Ask Gemini to emit JSON, which reduces fence issues a lot
-    responseMimeType: process.env.STRICT_JSON === "false" ? undefined : "application/json",
-  };
-
-  // One-shot request (no multi-turn needed here)
-  const result = await model.generateContent({
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    generationConfig,
-  });
-
-  const text = result?.response?.text?.();
-  if (!text || typeof text !== "string") {
-    throw new Error("Empty model response");
-  }
-  return text.trim();
-}
+/**
+ * Generates content using the AI model.
+ * @param {string} prompt - The prompt to send to the model.
+ * @returns {Promise<string>} - The generated text content.
+ */
+export const generateContent = async (prompt) => {
+  const modelInstance = getModel();
+  
+  const result = await modelInstance.generateContent(prompt);
+  const response = await result.response;
+  const text = await response.text();
+  
+  return text;
+};

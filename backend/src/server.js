@@ -5,6 +5,9 @@ import cors from "cors";
 import roadmapRouter from "./routes/roadmap.js";
 
 dotenv.config();
+console.log("--- Verifying Environment Variables ---");
+console.log("Loaded GEMINI_API_KEY:", process.env.GOOGLE_API_KEY ? `...${process.env.GOOGLE_API_KEY.slice(-4)}` : "Not Found!");
+console.log("------------------------------------");
 
 const app = express();
 app.use(cors()); // allow localhost frontend, tighten later in prod
