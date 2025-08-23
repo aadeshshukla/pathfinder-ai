@@ -1,14 +1,5 @@
 import { ROADMAP_OUTPUT_SPEC } from "./schemas.js";
 
-/**
- * Builds a detailed prompt for the AI model based on user input.
- * @param {object} userInput - The user's input from the frontend.
- * @param {string} userInput.goal - The user's primary learning goal.
- * @param {string} userInput.experience - The user's experience level (e.g., 'Beginner').
- * @param {string} userInput.timeCommitment - The user's available time.
- * @param {string} userInput.learningStyle - The user's preferred learning style.
- * @returns {string} The complete prompt to be sent to the AI.
- */
 export function buildPrompt(userInput) {
   const { goal, experience, timeCommitment, learningStyle } = userInput;
 
