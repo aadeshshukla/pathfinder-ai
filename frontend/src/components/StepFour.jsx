@@ -1,7 +1,7 @@
 import React from 'react';
 import './StepFour.css';
 
-const StepFour = ({ roadmapData, onPrevious, isLoading, error }) => {
+const StepFour = ({ roadmapData, isLoading, error, onPrevious }) => {
   // 1. Show a loading state
   if (isLoading) {
     return (
@@ -41,6 +41,7 @@ const StepFour = ({ roadmapData, onPrevious, isLoading, error }) => {
         Here is your step-by-step guide. Total estimated time: <strong>{roadmapData.timeline.totalDays} days</strong>.
       </p>
 
+      {/* Render Milestones (no change here) */}
       {roadmapData.milestones.map((milestone) => (
         <div key={milestone.id} className="module-card">
           <h3>{milestone.title}</h3>
@@ -56,6 +57,23 @@ const StepFour = ({ roadmapData, onPrevious, isLoading, error }) => {
           </div>
         </div>
       ))}
+      
+      {/* --- NEW RESOURCES SECTION --- */}
+      <div className="module-card">
+        <h3>Recommended Resources</h3>
+        <ul className="resource-list">
+          {roadmapData.resources.map((resource, index) => (
+            <li key={index}>
+              <span className={`resource-type resource-${resource.type.toLowerCase()}`}>{resource.type}</span>
+              <a href={resource.link} target="_blank" rel="noopener noreferrer">
+                {resource.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* --- END OF NEW SECTION --- */}
+
       <div className="navigation-buttons">
         <button onClick={onPrevious}>Create a New Roadmap</button>
       </div>

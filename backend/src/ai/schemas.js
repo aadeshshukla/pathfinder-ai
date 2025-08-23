@@ -1,7 +1,7 @@
 // JSON schema definitions for roadmap validation
 // Minimal input validation and output schema spec
 
-export function validateRoadmapInput(payload = {}) {
+export function roadmapSchema(payload = {}) {
     const errors = [];
     const isStr = (v) => typeof v === "string";
     const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
