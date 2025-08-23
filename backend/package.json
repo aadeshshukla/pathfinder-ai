@@ -7,9 +7,10 @@
     "start": "node src/server.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.18.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.0.1",
+    "groq-sdk": "^0.30.0"
   }
 }

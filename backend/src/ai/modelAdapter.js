@@ -1,41 +1,42 @@
-// backend/src/ai/modelAdapter.js
+import Groq from 'groq-sdk';
+import { buildPrompt } from './promptBuilder.js';
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Create a variable to hold the model, but don't initialize it yet.
-let model;
+// Initialize the Groq client
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 /**
- * Initializes and returns the Generative AI model.
- * This function ensures the API key is loaded from the environment before the client is created.
+ * Generates a learning roadmap by calling the Groq API.
+ * @param {object} userInput - The user's input from the frontend.
+ * @returns {Promise<string>} - A promise that resolves to the raw JSON string from the AI.
  */
-export const getModel = () => {
-  // Only initialize the model if it hasn't been already.
-  if (!model) {
-    // Check if the API key exists. If not, throw a clear error.
-    if (!process.env.GOOGLE_API_KEY) {
-      throw new Error('GOOGLE_API_KEY is missing in the environment. Please check your .env file.');
+async function generateRoadmap(userInput) {
+  const prompt = buildPrompt(userInput);
+  console.log('Sending request to Groq API...');
+
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'llama3-8b-8192',
+      response_format: { type: 'json_object' }, // Ask for JSON
+      temperature: 0.5,
+      max_tokens: 4096,
+    });
+
+    const jsonString = chatCompletion.choices[0]?.message?.content;
+
+    if (!jsonString) {
+      throw new Error('Received an empty response from Groq API.');
     }
     
-    // Now that we've confirmed the key is loaded, create the client.
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-    model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
-  }
-  
-  return model;
-};
+    console.log('Successfully received response from Groq API.');
+    return jsonString; // Return the raw string
 
-/**
- * Generates content using the AI model.
- * @param {string} prompt - The prompt to send to the model.
- * @returns {Promise<string>} - The generated text content.
- */
-export const generateContent = async (prompt) => {
-  const modelInstance = getModel();
-  
-  const result = await modelInstance.generateContent(prompt);
-  const response = await result.response;
-  const text = await response.text();
-  
-  return text;
-};
+  } catch (error) {
+    console.error('Error calling Groq API:', error);
+    throw new Error('Failed to generate roadmap via Groq API.');
+  }
+}
+
+export { generateRoadmap };

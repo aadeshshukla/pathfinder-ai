@@ -1,52 +1,63 @@
 import React from 'react';
-import './StepFour.css'; // We'll create this CSS file next
+import './StepFour.css';
 
-const StepFour = ({ roadmapData, onPrevious }) => {
-  if (!roadmapData) {
+const StepFour = ({ roadmapData, onPrevious, isLoading, error }) => {
+  // 1. Show a loading state
+  if (isLoading) {
     return (
-      <div className="step">
+      <div className="step-container">
         <h2>Generating your roadmap...</h2>
-        <p>Please wait a moment.</p>
-        <div className="navigation-buttons">
-          <button onClick={onPrevious}>Previous</button>
-        </div>
+        <p>Our AI is crafting your personalized path. Please wait a moment.</p>
       </div>
     );
   }
 
+  // 2. Show an error state
+  if (error) {
+    return (
+      <div className="step-container">
+        <h2>Oops! Something went wrong.</h2>
+        <p style={{ color: 'red' }}>{error}</p>
+        <button onClick={onPrevious}>Try Again</button>
+      </div>
+    );
+  }
+
+  // 3. Show this if something unexpected happens
+  if (!roadmapData) {
+    return (
+      <div className="step-container">
+        <h2>No roadmap to display.</h2>
+        <button onClick={onPrevious}>Start Over</button>
+      </div>
+    );
+  }
+
+  // 4. Show the successful roadmap
   return (
-    <div className="step roadmap-container">
-      <h2>Your Personalized Learning Roadmap:</h2>
-      <p className="roadmap-intro">{roadmapData.introduction}</p>
+    <div className="step-container roadmap-container">
+      <h2>Your Personalized Learning Roadmap is Ready!</h2>
+      <p className="roadmap-intro">
+        Here is your step-by-step guide. Total estimated time: <strong>{roadmapData.timeline.totalDays} days</strong>.
+      </p>
 
-      {roadmapData.modules.map((module, moduleIndex) => (
-        <div key={moduleIndex} className="module-card">
-          <h3>{module.module_title}</h3>
-          <p className="module-duration"><strong>Estimated Duration:</strong> {module.duration}</p>
-          <p className="module-description">{module.description}</p>
-
-          {module.topics.map((topic, topicIndex) => (
-            <div key={topicIndex} className="topic-card">
-              <h4>{topic.topic_name}</h4>
-              <p>{topic.description}</p>
-              
-              <ul className="resource-list">
-                {topic.resources.map((resource, resourceIndex) => (
-                  <li key={resourceIndex}>
-                    <span className={`resource-type resource-${resource.type.toLowerCase()}`}>{resource.type}</span>
-                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                      {resource.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      {roadmapData.milestones.map((milestone) => (
+        <div key={milestone.id} className="module-card">
+          <h3>{milestone.title}</h3>
+          <p className="module-duration"><strong>Estimated Duration:</strong> {milestone.estimatedDays} days</p>
+          <p className="module-description">{milestone.description}</p>
+          <div className="topic-card">
+            <h4>Key Tasks & Topics:</h4>
+            <ul>
+              {milestone.tasks.map((task, taskIndex) => (
+                <li key={taskIndex}>{task}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       ))}
-      
       <div className="navigation-buttons">
-        <button onClick={onPrevious}>Go Back</button>
+        <button onClick={onPrevious}>Create a New Roadmap</button>
       </div>
     </div>
   );

@@ -1,42 +1,42 @@
 import dotenv from 'dotenv';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import path from 'path'; // Import the 'path' module
+import { fileURLToPath } from 'url'; // Import helper for ES modules
+import { generateRoadmap } from './modelAdapter.js';
 
-// Load environment variables from your .env file
-dotenv.config();
+// --- Start of new, robust path configuration ---
+// This safely constructs the correct path to your .env file
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const envPath = path.resolve(__dirname, '../../.env'); // Go up two directories from /src/ai to /backend
+dotenv.config({ path: envPath });
+// --- End of new configuration ---
 
-const testApiKey = async () => {
-  const apiKey = process.env.GOOGLE_API_KEY;
-
-  if (!apiKey) {
-    console.error('\n❌ ERROR: GOOGLE_API_KEY not found in .env file.');
+async function runTest() {
+  if (!process.env.GROQ_API_KEY) {
+    console.error('❌ ERROR: GROQ_API_KEY not found!');
+    console.error('Please double-check the following:');
+    console.error('1. Is your .env file located in the root of the /backend folder?');
+    console.error('2. Is the variable name exactly GROQ_API_KEY ?');
+    console.error('3. Did you save the .env file?');
     return;
   }
+  console.log('✅ Groq API Key loaded.');
 
-  console.log(`\n🔑 Found API Key ending in: ...${apiKey.slice(-4)}`);
-  console.log('Attempting to make a single API call to Google AI...');
+  const testInput = {
+    goal: 'Learn about Quantum Computing',
+    skillLevel: 'Absolute Beginner',
+    learningStyle: 'Video Lectures',
+    timeCommitment: '3 hours per week',
+  };
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' }); // Using a basic model for a simple test
-
-    const prompt = "In one sentence, what is a large language model?";
-    
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    console.log('\n✅ SUCCESS! The API call worked.');
-    console.log('API Response:', text);
-
+    const roadmap = await generateRoadmap(testInput);
+    console.log('\n✅ SUCCESS! Received roadmap from Groq:\n');
+    console.log(JSON.stringify(roadmap, null, 2));
   } catch (error) {
-    console.error('\n❌ FAILURE: The API call failed.');
-    // Check if it's the 429 error
-    if (error.message && error.message.includes('429')) {
-      console.error('Error Details: You are still being rate-limited by Google. This confirms the issue is with your Google Cloud Project quota, not the application code.');
-    } else {
-      console.error('Error Details:', error);
-    }
+    console.error('\n❌ FAILED to get roadmap from Groq.');
+    console.error('Error Details:', error.message);
   }
-};
+}
 
-testApiKey();
+runTest();
