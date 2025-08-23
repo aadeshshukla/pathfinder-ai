@@ -2,80 +2,118 @@ import React from 'react';
 import './StepFour.css';
 
 const StepFour = ({ roadmapData, isLoading, error, onPrevious }) => {
-  // 1. Show a loading state
   if (isLoading) {
     return (
-      <div className="step-container">
-        <h2>Generating your roadmap...</h2>
-        <p>Our AI is crafting your personalized path. Please wait a moment.</p>
+      <div className="step-container compact">
+        <div className="loading-state">
+          <div className="spinner"></div>
+          <h2>🎨 Generating Your Roadmap...</h2>
+          <p>Our AI is crafting your personalized learning path. This may take a moment.</p>
+        </div>
       </div>
     );
   }
 
-  // 2. Show an error state
   if (error) {
     return (
-      <div className="step-container">
-        <h2>Oops! Something went wrong.</h2>
-        <p style={{ color: 'red' }}>{error}</p>
-        <button onClick={onPrevious}>Try Again</button>
+      <div className="step-container compact">
+        <div className="error-state">
+          <h2>😕 Oops! Something went wrong</h2>
+          <p className="error-message">{error}</p>
+          <button onClick={onPrevious} className="btn btn-primary">
+            🔄 Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
-  // 3. Show this if something unexpected happens
   if (!roadmapData) {
     return (
-      <div className="step-container">
-        <h2>No roadmap to display.</h2>
-        <button onClick={onPrevious}>Start Over</button>
+      <div className="step-container compact">
+        <div className="empty-state">
+          <h2>📭 No roadmap to display</h2>
+          <p>Something unexpected happened. Let's start over.</p>
+          <button onClick={onPrevious} className="btn btn-primary">
+            🏠 Start Over
+          </button>
+        </div>
       </div>
     );
   }
 
-  // 4. Show the successful roadmap
   return (
-    <div className="step-container roadmap-container">
-      <h2>Your Personalized Learning Roadmap is Ready!</h2>
-      <p className="roadmap-intro">
-        Here is your step-by-step guide. Total estimated time: <strong>{roadmapData.timeline.totalDays} days</strong>.
-      </p>
-
-      {/* Render Milestones (no change here) */}
-      {roadmapData.milestones.map((milestone) => (
-        <div key={milestone.id} className="module-card">
-          <h3>{milestone.title}</h3>
-          <p className="module-duration"><strong>Estimated Duration:</strong> {milestone.estimatedDays} days</p>
-          <p className="module-description">{milestone.description}</p>
-          <div className="topic-card">
-            <h4>Key Tasks & Topics:</h4>
-            <ul>
-              {milestone.tasks.map((task, taskIndex) => (
-                <li key={taskIndex}>{task}</li>
-              ))}
-            </ul>
-          </div>
+    <div className="roadmap-view">
+      <div className="roadmap-header">
+        <h1>🎯 Your Learning Roadmap is Ready!</h1>
+        <div className="roadmap-meta">
+          <span className="duration-badge">
+            ⏱️ {roadmapData.timeline.totalDays} days total
+          </span>
+          <span className="milestone-count">
+            🎯 {roadmapData.milestones.length} milestones
+          </span>
         </div>
-      ))}
-      
-      {/* --- NEW RESOURCES SECTION --- */}
-      <div className="module-card">
-        <h3>Recommended Resources</h3>
-        <ul className="resource-list">
-          {roadmapData.resources.map((resource, index) => (
-            <li key={index}>
-              <span className={`resource-type resource-${resource.type.toLowerCase()}`}>{resource.type}</span>
-              <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                {resource.name}
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
-      {/* --- END OF NEW SECTION --- */}
 
-      <div className="navigation-buttons">
-        <button onClick={onPrevious}>Create a New Roadmap</button>
+      <div className="roadmap-content">
+        {roadmapData.milestones.map((milestone, index) => (
+          <div key={milestone.id || index} className="milestone-card">
+            <div className="milestone-header">
+              <span className="milestone-number">{index + 1}</span>
+              <div className="milestone-info">
+                <h3>{milestone.title}</h3>
+                <div className="milestone-duration">
+                  📅 {milestone.estimatedDays} days
+                </div>
+              </div>
+            </div>
+            
+            <p className="milestone-description">{milestone.description}</p>
+            
+            {milestone.tasks && milestone.tasks.length > 0 && (
+              <div className="milestone-tasks">
+                <h4>📋 Key Tasks</h4>
+                <ul className="task-list">
+                  {milestone.tasks.map((task, taskIndex) => (
+                    <li key={taskIndex} className="task-item">
+                      {task}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {roadmapData.resources && roadmapData.resources.length > 0 && (
+          <div className="resources-section">
+            <h2>📚 Recommended Resources</h2>
+            <div className="resources-grid">
+              {roadmapData.resources.map((resource, index) => (
+                <a
+                  key={index}
+                  href={resource.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resource-card"
+                >
+                  <span className={`resource-badge ${resource.type.toLowerCase()}`}>
+                    {resource.type}
+                  </span>
+                  <span className="resource-name">{resource.name}</span>
+                  <span className="external-link">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="roadmap-actions">
+        <button onClick={onPrevious} className="btn btn-primary">
+          🆕 Create New Roadmap
+        </button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ProgressBar from './components/progressBar'; // Corrected import path
-import './components/PathfinderMVP.css'; // Corrected import path
-import StepFour from './components/StepFour'; // Make sure StepFour is imported
+import ProgressBar from './components/progressBar';
+import './components/PathfinderMVP.css';
+import StepFour from './components/StepFour';
 
 const PathfinderMVP = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -12,14 +12,9 @@ const PathfinderMVP = () => {
     learningStyle: 'Project-Based',
   });
   
-  // --- NEW CODE ADDED HERE ---
-  // State to hold the final roadmap data
   const [roadmapData, setRoadmapData] = useState(null); 
-  // State to know when the AI is working
   const [isLoading, setIsLoading] = useState(false); 
-  // State to handle any errors from the API call
   const [error, setError] = useState(null); 
-  // --- END OF NEW CODE ---
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +24,6 @@ const PathfinderMVP = () => {
   const handleNext = () => setCurrentStep((prev) => prev + 1);
   
   const handlePrevious = () => {
-    // When going back from the final step, reset everything
     if (currentStep === 4) {
       setRoadmapData(null);
       setError(null);
@@ -40,12 +34,11 @@ const PathfinderMVP = () => {
     }
   };
 
-  // --- THIS FUNCTION IS UPDATED ---
   const handleGenerate = async () => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     setError(null);
     setRoadmapData(null);
-    setCurrentStep(4); // Move to the results page to show the loading message
+    setCurrentStep(4);
 
     try {
       const response = await fetch('/api/roadmap', {
@@ -57,88 +50,160 @@ const PathfinderMVP = () => {
       });
 
       if (!response.ok) {
-        // Handle HTTP errors like 500
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      setRoadmapData(data); // Set the roadmap data
+      setRoadmapData(data);
       
     } catch (e) {
       console.error('API Call Failed:', e);
       setError('Failed to generate the roadmap. Please try again.');
     } finally {
-      setIsLoading(false); // Stop loading, regardless of success or failure
+      setIsLoading(false);
     }
   };
-  // --- END OF UPDATED FUNCTION ---
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="step-container">
-            <h2>What's Your Learning Goal?</h2>
-            <p>Be specific! e.g., "Become a full-stack web developer."</p>
-            <input
-              type="text"
-              name="goal"
-              value={formData.goal}
-              onChange={handleChange}
-              placeholder="e.g., Learn AI-powered web applications"
-            />
-            <div className="navigation-buttons">
-              <button onClick={handleNext} disabled={!formData.goal.trim()}>Next</button>
+          <div className="step-container compact">
+            <div className="step-header">
+              <h2>🎯 What's Your Learning Goal?</h2>
+              <p>Be specific about what you want to achieve</p>
+            </div>
+            
+            <div className="form-content">
+              <input
+                type="text"
+                name="goal"
+                value={formData.goal}
+                onChange={handleChange}
+                placeholder="e.g., Learn full-stack web development"
+                className="form-input"
+              />
+            </div>
+            
+            <div className="step-actions">
+              <button 
+                onClick={handleNext} 
+                disabled={!formData.goal.trim()}
+                className="btn btn-primary"
+              >
+                Next →
+              </button>
             </div>
           </div>
         );
+        
       case 2:
         return (
-          <div className="step-container">
-            <h2>Tell Us About Yourself</h2>
-            <div className="input-group">
-              <label>Your current skill level:</label>
-              <select name="skillLevel" value={formData.skillLevel} onChange={handleChange}>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-              </select>
+          <div className="step-container compact">
+            <div className="step-header">
+              <h2>👤 Tell Us About Yourself</h2>
+              <p>Help us customize your learning path</p>
             </div>
-            <div className="input-group">
-              <label>Time commitment per week:</label>
-              <select name="timeCommitment" value={formData.timeCommitment} onChange={handleChange}>
-                <option value="2-4 hours per week">Casual (2-4 hours)</option>
-                <option value="5-8 hours per week">Moderate (5-8 hours)</option>
-                <option value="10+ hours per week">Intensive (10+ hours)</option>
-              </select>
+            
+            <div className="form-content">
+              <div className="form-row">
+                <label className="form-label">Skill Level</label>
+                <select 
+                  name="skillLevel" 
+                  value={formData.skillLevel} 
+                  onChange={handleChange}
+                  className="form-select"
+                >
+                  <option value="Beginner">🌱 Beginner</option>
+                  <option value="Intermediate">🌿 Intermediate</option>
+                  <option value="Advanced">🌳 Advanced</option>
+                </select>
+              </div>
+              
+              <div className="form-row">
+                <label className="form-label">Time Commitment</label>
+                <select 
+                  name="timeCommitment" 
+                  value={formData.timeCommitment} 
+                  onChange={handleChange}
+                  className="form-select"
+                >
+                  <option value="5 hours per week">⏰ 5 hours/week</option>
+                  <option value="10 hours per week">⏱️ 10 hours/week</option>
+                  <option value="15 hours per week">⏲️ 15 hours/week</option>
+                  <option value="20+ hours per week">🕐 20+ hours/week</option>
+                </select>
+              </div>
+              
+              <div className="form-row">
+                <label className="form-label">Learning Style</label>
+                <select 
+                  name="learningStyle" 
+                  value={formData.learningStyle} 
+                  onChange={handleChange}
+                  className="form-select"
+                >
+                  <option value="Project-Based">🛠️ Project-Based</option>
+                  <option value="Theory-First">📚 Theory-First</option>
+                  <option value="Video Tutorials">🎥 Video Tutorials</option>
+                  <option value="Reading Documentation">📖 Documentation</option>
+                </select>
+              </div>
             </div>
-            <div className="input-group">
-               <label>Preferred learning style:</label>
-               <select name="learningStyle" value={formData.learningStyle} onChange={handleChange}>
-                <option value="Project-Based">Project-Based</option>
-                <option value="Structured Courses">Structured Courses</option>
-                <option value="Reading Documentation">Reading Documentation</option>
-              </select>
-            </div>
-            <div className="navigation-buttons">
-              <button onClick={handlePrevious}>Previous</button>
-              <button onClick={handleNext}>Next</button>
+            
+            <div className="step-actions">
+              <button onClick={handlePrevious} className="btn btn-secondary">
+                ← Previous
+              </button>
+              <button onClick={handleNext} className="btn btn-primary">
+                Next →
+              </button>
             </div>
           </div>
         );
+        
       case 3:
         return (
-          <div className="step-container">
-            <h2>Ready to Generate?</h2>
-            <p>Click below to create your personalized learning path.</p>
-            <div className="navigation-buttons">
-              <button onClick={handlePrevious}>Previous</button>
-              <button onClick={handleGenerate}>Generate Roadmap</button>
+          <div className="step-container compact">
+            <div className="step-header">
+              <h2>🚀 Ready to Generate?</h2>
+              <p>Let's create your personalized learning roadmap</p>
+            </div>
+            
+            <div className="summary-card">
+              <h3>📋 Your Profile</h3>
+              <div className="summary-items">
+                <div className="summary-item">
+                  <span className="summary-label">Goal:</span>
+                  <span className="summary-value">{formData.goal}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Level:</span>
+                  <span className="summary-value">{formData.skillLevel}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Time:</span>
+                  <span className="summary-value">{formData.timeCommitment}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Style:</span>
+                  <span className="summary-value">{formData.learningStyle}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="step-actions">
+              <button onClick={handlePrevious} className="btn btn-secondary">
+                ← Previous
+              </button>
+              <button onClick={handleGenerate} className="btn btn-success">
+                🎯 Generate Roadmap
+              </button>
             </div>
           </div>
         );
+        
       case 4:
-        // This now correctly passes all necessary info to StepFour
         return (
           <StepFour
             roadmapData={roadmapData}
@@ -147,6 +212,7 @@ const PathfinderMVP = () => {
             onPrevious={handlePrevious}
           />
         );
+        
       default:
         return null;
     }
@@ -156,8 +222,11 @@ const PathfinderMVP = () => {
     <div className="pathfinder-container">
       <div className="app-header">
         <h1>Pathfinder AI</h1>
+        <p>Your Personalized Learning Journey</p>
       </div>
+      
       <ProgressBar currentStep={currentStep} totalSteps={4} />
+      
       <div className="step-content">
         {renderStepContent()}
       </div>

@@ -1,34 +1,39 @@
-import { roadmapSchema } from './schemas.js';
+import { ROADMAP_OUTPUT_SPEC } from './schemas.js';
 
 export function buildPrompt(userInput) {
   const { goal, skillLevel, timeCommitment, learningStyle } = userInput;
 
-  // This is the core instruction to the AI.
   const prompt = `
-    You are an expert curriculum designer and career mentor AI named Pathfinder. 
-    Your task is to generate a detailed, personalized learning roadmap based on the user's specific inputs.
+You are an expert curriculum designer and career mentor AI named Pathfinder. 
+Your task is to generate a detailed, personalized learning roadmap based on the user's specific inputs.
 
-    User Inputs:
-    - Goal: "${goal}"
-    - Current Skill Level: "${skillLevel}"
-    - Weekly Time Commitment: "${timeCommitment}"
-    - Preferred Learning Style: "${learningStyle}"
+User Inputs:
+- Goal: "${goal}"
+- Current Skill Level: "${skillLevel}"
+- Weekly Time Commitment: "${timeCommitment}"
+- Preferred Learning Style: "${learningStyle}"
 
-    Instructions:
-    1.  Create a sequence of logical "milestones" to guide the user from their skill level to their goal.
-    2.  For each milestone, provide a list of concrete "tasks" or topics to learn.
-    3.  Estimate the number of days required for each milestone based on the user's time commitment.
-    4.  Provide a "timeline" object with a total estimated duration in days.
-    
-    --- CRITICAL INSTRUCTION ---
-    5.  You MUST include a "resources" section. This section must contain an array of at least 5 high-quality, real, and publicly accessible learning resources.
-    6.  For each resource, provide its name, type (e.g., Video, Article, Course, Documentation, Book), and a valid, working URL in the "link" property.
-    7.  DO NOT invent or hallucinate URLs. Prioritize official documentation, highly-rated YouTube tutorials, reputable educational platforms (like freeCodeCamp, MDN Web Docs), and well-known technical blogs.
+Instructions:
+1. Create a sequence of logical "milestones" to guide the user from their skill level to their goal.
+2. For each milestone, provide:
+   - A unique "id" (kebab-case slug)
+   - A clear "title"
+   - A detailed "description"
+   - An "estimatedDays" number based on the user's time commitment
+   - A "tasks" array with specific, actionable items
 
-    Your final output MUST be a single, valid JSON object that strictly adheres to the following schema. Do not include any text, explanations, or markdown formatting outside of the JSON object itself.
+3. CRITICAL: Create a "timeline" object with:
+   - "totalDays": The total number of days (sum of all milestone estimatedDays)
+   - "rationale": A string explaining how you calculated the timeline
 
-    JSON Schema:
-    ${JSON.stringify(roadmapSchema, null, 2)}
+4. Include a "resources" section with at least 5 high-quality, real resources:
+   - Each resource needs "name", "type", and "link"
+   - Types: "Video", "Article", "Course", "Documentation", "Book", "Tool", "Repository"
+   - Use ONLY real, working URLs (official docs, YouTube, freeCodeCamp, etc.)
+
+5. Optionally include "tips" array with helpful learning advice.
+
+${ROADMAP_OUTPUT_SPEC}
   `;
 
   return prompt;
