@@ -31,26 +31,103 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
   font-family: 'Inter', sans-serif;
+ 
+  
 }
 
 /* App Header */
+/* --- Logo / Branding Styles (Added) --- */
 .app-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: white;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 2rem auto; /* Centered horizontally */
+  width: 100%;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.25rem 1.75rem;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.18);
 }
 
-.app-header h1 {
-  font-size: 2.5rem;
+.app-header .branding {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 900px;
+}
+
+.app-header .app-logo {
+  height: clamp(48px, 8vh, 72px);
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  
+  /* Logo transparency fixes */
+ 
+  mix-blend-mode: screen; /* Adjust this if needed - try 'screen', 'multiply', or remove */
+  
+  /* filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25)); */ /* <-- Temporarily disabled */
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.app-header .app-logo:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.35));
+}
+
+.app-header .branding-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header .branding-text h1 {
+  font-size: clamp(1.9rem, 2.8vw, 2.75rem);
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 0 0.35rem 0;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff, #e0eaff 40%, #c8d2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.app-header p {
-  font-size: 1.1rem;
+.app-header .branding-text p {
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
   margin: 0;
-  opacity: 0.9;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.5px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .app-header {
+    padding: 1rem 1.25rem;
+  }
+  .app-header .branding {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .app-header .app-logo {
+    height: 56px;
+  }
+  .app-header .branding-text h1 {
+    font-size: 1.9rem;
+  }
+}
+
+/* Ultra-small devices */
+@media (max-width: 400px) {
+  .app-header .branding {
+    gap: 0.65rem;
+  }
+  .app-header .app-logo {
+    height: 48px;
+  }
+  .app-header .branding-text h1 {
+    font-size: 1.6rem;
+  }
 }
 
 /* Progress Bar */

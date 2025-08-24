@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from './assets/pathfinder-logo.png'; 
 import ProgressBar from './components/progressBar';
 import './components/PathfinderMVP.css';
 import StepFour from './components/StepFour';
@@ -220,13 +221,23 @@ const PathfinderMVP = () => {
 
   return (
     <div className="pathfinder-container">
-      <div className="app-header">
-        <h1>Pathfinder AI</h1>
-        <p>Your Personalized Learning Journey</p>
-      </div>
-      
+      <header className="app-header">
+        <div className="branding">
+          <img
+            src={logo}
+            alt="Pathfinder AI Logo"
+            className="app-logo"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="branding-text">
+            <h1>Pathfinder AI</h1>
+            <p>Your Personalized Learning Journey</p>
+          </div>
+        </div>
+      </header>
+
       <ProgressBar currentStep={currentStep} totalSteps={4} />
-      
       <div className="step-content">
         {renderStepContent()}
       </div>
