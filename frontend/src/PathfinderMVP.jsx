@@ -212,7 +212,7 @@ const PathfinderMVP = () => {
             isLoading={isLoading}
             error={error}
             onPrevious={handlePrevious}
-            formData={formData}
+           
           />
         );
         

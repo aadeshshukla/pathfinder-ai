@@ -256,13 +256,8 @@
   font-size: 1.2rem;
 }
 
-/* Add to existing CSS */
-
 /* Roadmap Actions */
 .roadmap-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
   text-align: center;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.95);
@@ -270,23 +265,6 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.roadmap-actions .btn {
-  min-width: 160px;
-}
-
-/* Responsive - stack buttons on mobile */
-@media (max-width: 768px) {
-  .roadmap-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .roadmap-actions .btn {
-    width: 100%;
-    max-width: 250px;
-  }
 }
 
 /* Responsive Design */
