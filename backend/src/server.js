@@ -8,9 +8,13 @@ import roadmapRouter from './routes/roadmap.js';
 // --- Server Setup ---
 const app = express();
 const PORT = process.env.PORT || 3001;
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const corsOptions = {
+  origin: frontendURL,
+};
 
 // --- Middleware ---
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // --- API Routes ---

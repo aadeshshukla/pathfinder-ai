@@ -42,7 +42,8 @@ const PathfinderMVP = () => {
     setCurrentStep(4);
 
     try {
-      const response = await fetch('/api/roadmap', {
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/roadmap`;
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
