@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ProgressBar from './components/progressBar';
 import './components/PathfinderMVP.css';
 import StepFour from './components/StepFour';
+import pathfinderLogo from './assets/pathfinder-logo.png';
 
 const PathfinderMVP = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -221,6 +222,7 @@ const PathfinderMVP = () => {
   return (
     <div className="pathfinder-container">
       <div className="app-header">
+        <img src={pathfinderLogo} alt="Pathfinder AI" className="app-logo" />
         <h1>Pathfinder AI</h1>
         <p>Your Personalized Learning Journey</p>
       </div>
