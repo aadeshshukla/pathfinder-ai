@@ -11,16 +11,18 @@
 .empty-state {
   text-align: center;
   padding: 2rem 1rem;
+  color: var(--text-secondary);
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #e2e8f0;
-  border-top: 4px solid var(--primary);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid var(--cyan-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem auto;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 
 @keyframes spin {
@@ -29,33 +31,44 @@
 }
 
 .error-message {
-  color: #dc2626;
+  color: #ff6b6b;
   margin: 1rem 0;
+  font-weight: 500;
 }
 
 /* Roadmap Header */
 .roadmap-header {
   text-align: center;
   margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-cyan);
+  position: relative;
+}
+
+.roadmap-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .roadmap-header h1 {
-  font-size: 1.875rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--gray-800);
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, var(--primary), var(--success));
+  background: linear-gradient(135deg, var(--text-primary), var(--cyan-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
 .roadmap-meta {
   display: flex;
   justify-content: center;
@@ -65,13 +78,14 @@
 
 .duration-badge,
 .milestone-count {
-  background: var(--gray-100);
-  color: var(--gray-700);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
 }
 
 /* Roadmap Content */
@@ -83,11 +97,11 @@
 
 /* Milestone Cards */
 .milestone-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-lg);
   padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
@@ -101,12 +115,13 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--success));
+  background: linear-gradient(90deg, var(--cyan-primary), var(--blue-start), var(--blue-end));
 }
 
 .milestone-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-cyan);
+  border-color: rgba(0, 212, 255, 0.3);
 }
 
 .milestone-header {
@@ -122,12 +137,13 @@
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
-  background: linear-gradient(135deg, var(--primary), var(--success));
-  color: white;
+  background: linear-gradient(135deg, var(--cyan-primary), var(--blue-start));
+  color: var(--text-primary);
   border-radius: 50%;
   font-weight: 600;
   font-size: 1.1rem;
   flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 
 .milestone-info {
@@ -137,18 +153,18 @@
 .milestone-info h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
 }
 
 .milestone-duration {
   font-size: 0.875rem;
-  color: var(--gray-600);
+  color: var(--text-muted);
   font-weight: 500;
 }
 
 .milestone-description {
-  color: var(--gray-700);
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -157,7 +173,7 @@
 .milestone-tasks h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--gray-800);
+  color: var(--text-primary);
   margin: 0 0 0.75rem 0;
 }
 
@@ -170,8 +186,8 @@
 .task-item {
   position: relative;
   padding: 0.5rem 0 0.5rem 1.5rem;
-  color: var(--gray-700);
-  border-bottom: 1px solid var(--gray-100);
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .task-item:last-child {
@@ -183,6 +199,9 @@
   position: absolute;
   left: 0;
   top: 0.5rem;
+  color: var(--cyan-primary);
+  font-weight: 600;
+}
   color: var(--success);
   font-weight: bold;
 }
