@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import logo from './assets/pathfinder-logo.png'; 
 import ProgressBar from './components/progressBar';
 import './components/PathfinderMVP.css';
 import StepFour from './components/StepFour';
 
 const PathfinderMVP = () => {
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     goal: '',
     skillLevel: 'Beginner',
     timeCommitment: '5 hours per week',
-    learningStyle: 'Project-Based',
+    learningStyle:  'Project-Based',
   });
   
   const [roadmapData, setRoadmapData] = useState(null); 
@@ -35,6 +39,10 @@ const PathfinderMVP = () => {
     }
   };
 
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
+  };
+
   const handleGenerate = async () => {
     setIsLoading(true);
     setError(null);
@@ -44,15 +52,21 @@ const PathfinderMVP = () => {
     try {
       const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/roadmap`;
       const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
+        method:  'POST',
+        headers:  {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 401) {
+          logout();
+          navigate('/login');
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response. status}`);
       }
 
       const data = await response.json();
@@ -89,8 +103,14 @@ const PathfinderMVP = () => {
             
             <div className="step-actions">
               <button 
+                onClick={handleBackToDashboard} 
+                className="btn btn-secondary"
+              >
+                ← Dashboard
+              </button>
+              <button 
                 onClick={handleNext} 
-                disabled={!formData.goal.trim()}
+                disabled={!formData.goal. trim()}
                 className="btn btn-primary"
               >
                 Next →
@@ -168,7 +188,7 @@ const PathfinderMVP = () => {
         return (
           <div className="step-container compact">
             <div className="step-header">
-              <h2>🚀 Ready to Generate?</h2>
+              <h2>🚀 Ready to Generate? </h2>
               <p>Let's create your personalized learning roadmap</p>
             </div>
             
@@ -189,7 +209,7 @@ const PathfinderMVP = () => {
                 </div>
                 <div className="summary-item">
                   <span className="summary-label">Style:</span>
-                  <span className="summary-value">{formData.learningStyle}</span>
+                  <span className="summary-value">{formData. learningStyle}</span>
                 </div>
               </div>
             </div>
@@ -211,8 +231,7 @@ const PathfinderMVP = () => {
             roadmapData={roadmapData}
             isLoading={isLoading}
             error={error}
-            onPrevious={handlePrevious}
-           
+            onPrevious={handleBackToDashboard}
           />
         );
         
@@ -248,4 +267,5 @@ const PathfinderMVP = () => {
 };
 
 export default PathfinderMVP;
+
 
