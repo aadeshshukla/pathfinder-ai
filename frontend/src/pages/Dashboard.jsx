@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FiPlus, FiClock, FiTarget, FiTrendingUp, FiGrid, FiList, FiTrash2, FiEye, FiSearch } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import logo from '../assets/pathfinder-logo.png';
+import Navbar from '../components/ui/Navbar';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { user, logout, token } = useAuth();
+  const { user, token } = useAuth();
   const [roadmaps, setRoadmaps] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState('grid'); // grid or list
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,43 +29,35 @@ const Dashboard = () => {
         }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch roadmaps');
-      }
+      if (!response.ok) throw new Error('Failed to fetch roadmaps');
 
       const data = await response.json();
-      setRoadmaps(data.roadmaps);
+      setRoadmaps(data. roadmaps);
     } catch (err) {
-      setError(err.message);
+      toast.error('Failed to load roadmaps');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (roadmapId) => {
-    if (! window.confirm('Are you sure you want to delete this roadmap?')) {
-      return;
-    }
+  const handleDelete = async (roadmapId, title) => {
+    if (!window.confirm(`Delete "${title}"?`)) return;
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roadmap/${roadmapId}`, {
         method: 'DELETE',
-        headers: {
+        headers:  {
           'Authorization': `Bearer ${token}`
         }
       });
 
       if (response.ok) {
         setRoadmaps(roadmaps.filter(r => r._id !== roadmapId));
+        toast.success('Roadmap deleted successfully');
       }
     } catch (err) {
-      console.error('Failed to delete roadmap:', err);
+      toast.error('Failed to delete roadmap');
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
   };
 
   const formatDate = (dateString) => {
@@ -70,73 +68,170 @@ const Dashboard = () => {
     });
   };
 
+  const filteredRoadmaps = roadmaps.filter(roadmap =>
+    roadmap.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    roadmap.skillLevel.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const stats = [
+    { label: 'Total Roadmaps', value: roadmaps.length, icon: <FiTarget />, color: '#6366f1' },
+    { label: 'This Month', value: roadmaps.filter(r => new Date(r.createdAt).getMonth() === new Date().getMonth()).length, icon: <FiClock />, color: '#10b981' },
+    { label: 'Skills Learning', value: new Set(roadmaps.map(r => r.skillLevel)).size, icon: <FiTrendingUp />, color: '#f59e0b' },
+  ];
+
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <div className="branding">
-          <img src={logo} alt="Pathfinder AI" className="app-logo" />
-          <div className="branding-text">
-            <h1>Pathfinder AI</h1>
-            <p>Dashboard</p>
+    <div className="dashboard-page">
+      <Navbar />
+      
+      <div className="dashboard-container">
+        {/* Welcome Section */}
+        <motion.div 
+          className="welcome-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity:  1, y: 0 }}
+        >
+          <div className="welcome-content">
+            <h1>Welcome back, {user?.username}!  👋</h1>
+            <p>Continue your learning journey where you left off</p>
           </div>
-        </div>
-        <div className="user-menu">
-          <span className="user-name">👋 {user?.username}</span>
-          <button onClick={handleLogout} className="btn-logout">Logout</button>
-        </div>
-      </header>
-
-      <div className="dashboard-content">
-        <div className="dashboard-actions">
-          <h2>Your Learning Roadmaps</h2>
-          <button 
-            onClick={() => navigate('/create')} 
-            className="btn-create"
+          <Button 
+            icon={<FiPlus />} 
+            onClick={() => navigate('/create')}
+            size="lg"
           >
-            ✨ Create New Roadmap
-          </button>
+            Create New Roadmap
+          </Button>
+        </motion.div>
+
+        {/* Stats Cards */}
+        <div className="stats-grid">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity:  1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="stat-card">
+                <div className="stat-icon" style={{ color: stat.color }}>
+                  {stat.icon}
+                </div>
+                <div className="stat-content">
+                  <h3>{stat.value}</h3>
+                  <p>{stat.label}</p>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
         </div>
 
-        {loading && <div className="loading">Loading your roadmaps...</div>}
-        {error && <div className="error-message">{error}</div>}
-
-        {!loading && roadmaps.length === 0 && (
-          <div className="empty-state">
-            <p>🎯 You haven't created any roadmaps yet</p>
-            <p>Click "Create New Roadmap" to get started! </p>
-          </div>
-        )}
-
-        <div className="roadmaps-grid">
-          {roadmaps.map((roadmap) => (
-            <div key={roadmap._id} className="roadmap-card">
-              <div className="roadmap-header">
-                <h3>{roadmap.title}</h3>
-                <span className="roadmap-level">{roadmap.skillLevel}</span>
+        {/* Roadmaps Section */}
+        <div className="roadmaps-section">
+          <div className="section-header">
+            <h2>Your Roadmaps</h2>
+            <div className="section-controls">
+              <div className="search-box">
+                <FiSearch />
+                <input
+                  type="text"
+                  placeholder="Search roadmaps..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-              
-              <div className="roadmap-info">
-                <p><strong>⏰ Time:</strong> {roadmap.timeCommitment}</p>
-                <p><strong>📚 Style:</strong> {roadmap.learningStyle}</p>
-                <p><strong>📅 Created:</strong> {formatDate(roadmap.createdAt)}</p>
-              </div>
-
-              <div className="roadmap-actions">
-                <button 
-                  onClick={() => navigate(`/roadmap/${roadmap._id}`)}
-                  className="btn-view"
+              <div className="view-toggle">
+                <button
+                  className={viewMode === 'grid' ? 'active' : ''}
+                  onClick={() => setViewMode('grid')}
                 >
-                  View
+                  <FiGrid />
                 </button>
-                <button 
-                  onClick={() => handleDelete(roadmap._id)}
-                  className="btn-delete"
+                <button
+                  className={viewMode === 'list' ? 'active' : ''}
+                  onClick={() => setViewMode('list')}
                 >
-                  Delete
+                  <FiList />
                 </button>
               </div>
             </div>
-          ))}
+          </div>
+
+          {loading ? (
+            <div className="loading-state">
+              <div className="spinner"></div>
+              <p>Loading your roadmaps...</p>
+            </div>
+          ) : filteredRoadmaps.length === 0 ? (
+            <motion.div 
+              className="empty-state"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <div className="empty-icon">📚</div>
+              <h3>{searchTerm ? 'No roadmaps found' : 'No roadmaps yet'}</h3>
+              <p>{searchTerm ? 'Try a different search term' : 'Create your first personalized learning roadmap!'}</p>
+              {! searchTerm && (
+                <Button icon={<FiPlus />} onClick={() => navigate('/create')}>
+                  Create Your First Roadmap
+                </Button>
+              )}
+            </motion.div>
+          ) : (
+            <div className={`roadmaps-${viewMode}`}>
+              {filteredRoadmaps.map((roadmap, index) => (
+                <motion.div
+                  key={roadmap._id}
+                  initial={{ opacity: 0, y:  20 }}
+                  animate={{ opacity: 1, y:  0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Card hover className="roadmap-card">
+                    <div className="roadmap-card-header">
+                      <h3>{roadmap.title}</h3>
+                      <span className={`skill-badge ${roadmap.skillLevel.toLowerCase()}`}>
+                        {roadmap.skillLevel}
+                      </span>
+                    </div>
+                    
+                    <div className="roadmap-card-info">
+                      <div className="info-item">
+                        <FiClock />
+                        <span>{roadmap.timeCommitment}</span>
+                      </div>
+                      <div className="info-item">
+                        <FiTarget />
+                        <span>{roadmap.learningStyle}</span>
+                      </div>
+                    </div>
+
+                    <div className="roadmap-card-footer">
+                      <span className="roadmap-date">{formatDate(roadmap.createdAt)}</span>
+                      <div className="roadmap-actions">
+                        <Button
+                          size="sm"
+                          icon={<FiEye />}
+                          onClick={() => navigate(`/roadmap/${roadmap._id}`)}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          icon={<FiTrash2 />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(roadmap._id, roadmap.title);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

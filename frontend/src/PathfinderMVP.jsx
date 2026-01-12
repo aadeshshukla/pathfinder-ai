@@ -1,51 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiTarget, FiUser, FiCheckCircle, FiArrowRight, FiArrowLeft } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import Confetti from 'react-confetti';
 import { useAuth } from './context/AuthContext';
-import logo from './assets/pathfinder-logo.png'; 
-import ProgressBar from './components/progressBar';
-import './components/PathfinderMVP.css';
+import Navbar from './components/ui/Navbar';
+import Button from './components/ui/Button';
+import Card from './components/ui/Card';
 import StepFour from './components/StepFour';
+import './components/PathfinderMVP.css';
 
 const PathfinderMVP = () => {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [formData, setFormData] = useState({
     goal: '',
     skillLevel: 'Beginner',
     timeCommitment: '5 hours per week',
-    learningStyle:  'Project-Based',
+    learningStyle: 'Project-Based',
   });
   
   const [roadmapData, setRoadmapData] = useState(null); 
   const [isLoading, setIsLoading] = useState(false); 
-  const [error, setError] = useState(null); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleNext = () => setCurrentStep((prev) => prev + 1);
+  const handleNext = () => {
+    setCurrentStep((prev) => prev + 1);
+  };
   
   const handlePrevious = () => {
     if (currentStep === 4) {
-      setRoadmapData(null);
-      setError(null);
-      setIsLoading(false);
-      setCurrentStep(1);
+      navigate('/dashboard');
     } else {
       setCurrentStep((prev) => prev - 1);
     }
   };
 
-  const handleBackToDashboard = () => {
-    navigate('/dashboard');
-  };
-
   const handleGenerate = async () => {
     setIsLoading(true);
-    setError(null);
     setRoadmapData(null);
     setCurrentStep(4);
 
@@ -54,7 +53,7 @@ const PathfinderMVP = () => {
       const response = await fetch(apiUrl, {
         method:  'POST',
         headers:  {
-          'Content-Type': 'application/json',
+          'Content-Type':  'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData),
@@ -66,163 +65,287 @@ const PathfinderMVP = () => {
           navigate('/login');
           return;
         }
-        throw new Error(`HTTP error! status: ${response. status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
       setRoadmapData(data);
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000);
+      toast.success('Roadmap created successfully!  🎉');
       
     } catch (e) {
       console.error('API Call Failed:', e);
-      setError('Failed to generate the roadmap. Please try again.');
+      toast.error('Failed to generate the roadmap. Please try again.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const skillLevels = [
+    { value: 'Beginner', icon: '🌱', description: 'Just starting out' },
+    { value:  'Intermediate', icon: '🌿', description: 'Some experience' },
+    { value:  'Advanced', icon: '🌳', description: 'Expert level' },
+  ];
+
+  const learningStyles = [
+    { value: 'Project-Based', icon: '🛠️', description: 'Learn by building' },
+    { value: 'Theory-First', icon: '📚', description: 'Understand concepts first' },
+    { value:  'Video Tutorials', icon: '🎥', description: 'Visual learning' },
+    { value: 'Reading Documentation', icon: '📖', description: 'Deep dive into docs' },
+  ];
+
+  const popularGoals = [
+    'Learn Full-Stack Web Development',
+    'Master Machine Learning',
+    'Become a Mobile App Developer',
+    'Learn Data Science',
+    'Master DevOps',
+    'Learn Cybersecurity',
+  ];
+
+  const pageVariants = {
+    initial: { opacity: 0, x: 50 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -50 },
   };
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="step-container compact">
-            <div className="step-header">
-              <h2>🎯 What's Your Learning Goal?</h2>
-              <p>Be specific about what you want to achieve</p>
-            </div>
-            
-            <div className="form-content">
-              <input
-                type="text"
-                name="goal"
-                value={formData.goal}
-                onChange={handleChange}
-                placeholder="e.g., Learn full-stack web development"
-                className="form-input"
-              />
-            </div>
-            
-            <div className="step-actions">
-              <button 
-                onClick={handleBackToDashboard} 
-                className="btn btn-secondary"
-              >
-                ← Dashboard
-              </button>
-              <button 
-                onClick={handleNext} 
-                disabled={!formData.goal. trim()}
-                className="btn btn-primary"
-              >
-                Next →
-              </button>
-            </div>
-          </div>
+          <motion.div 
+            className="step-container"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Card>
+              <div className="step-icon">
+                <FiTarget />
+              </div>
+              <div className="step-header">
+                <h2>What's Your Learning Goal?</h2>
+                <p>Be specific about what you want to achieve</p>
+              </div>
+              
+              <div className="form-content">
+                <div className="form-group-custom">
+                  <textarea
+                    name="goal"
+                    value={formData.goal}
+                    onChange={handleChange}
+                    placeholder="e. g., Learn full-stack web development to build modern web applications"
+                    className="goal-textarea"
+                    rows="4"
+                  />
+                  <span className="char-count">{formData.goal.length} characters</span>
+                </div>
+
+                <div className="popular-goals">
+                  <p className="popular-label">Popular goals:</p>
+                  <div className="goal-chips">
+                    {popularGoals.map((goal) => (
+                      <button
+                        key={goal}
+                        type="button"
+                        className="goal-chip"
+                        onClick={() => setFormData({... formData, goal})}
+                      >
+                        {goal}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="step-actions">
+                <Button 
+                  variant="secondary"
+                  onClick={() => navigate('/dashboard')}
+                  icon={<FiArrowLeft />}
+                >
+                  Back to Dashboard
+                </Button>
+                <Button 
+                  onClick={handleNext} 
+                  disabled={!formData.goal. trim()}
+                  icon={<FiArrowRight />}
+                >
+                  Next Step
+                </Button>
+              </div>
+            </Card>
+          </motion.div>
         );
         
       case 2:
         return (
-          <div className="step-container compact">
-            <div className="step-header">
-              <h2>👤 Tell Us About Yourself</h2>
-              <p>Help us customize your learning path</p>
-            </div>
-            
-            <div className="form-content">
-              <div className="form-row">
-                <label className="form-label">Skill Level</label>
-                <select 
-                  name="skillLevel" 
-                  value={formData.skillLevel} 
-                  onChange={handleChange}
-                  className="form-select"
-                >
-                  <option value="Beginner">🌱 Beginner</option>
-                  <option value="Intermediate">🌿 Intermediate</option>
-                  <option value="Advanced">🌳 Advanced</option>
-                </select>
+          <motion.div 
+            className="step-container"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Card>
+              <div className="step-icon">
+                <FiUser />
+              </div>
+              <div className="step-header">
+                <h2>Tell Us About Yourself</h2>
+                <p>Help us customize your learning path</p>
               </div>
               
-              <div className="form-row">
-                <label className="form-label">Time Commitment</label>
-                <select 
-                  name="timeCommitment" 
-                  value={formData.timeCommitment} 
-                  onChange={handleChange}
-                  className="form-select"
-                >
-                  <option value="5 hours per week">⏰ 5 hours/week</option>
-                  <option value="10 hours per week">⏱️ 10 hours/week</option>
-                  <option value="15 hours per week">⏲️ 15 hours/week</option>
-                  <option value="20+ hours per week">🕐 20+ hours/week</option>
-                </select>
+              <div className="form-content">
+                {/* Skill Level */}
+                <div className="form-section">
+                  <label className="section-label">What's your skill level?</label>
+                  <div className="option-cards">
+                    {skillLevels.map((level) => (
+                      <button
+                        key={level.value}
+                        type="button"
+                        className={`option-card ${formData.skillLevel === level.value ? 'active' : ''}`}
+                        onClick={() => setFormData({...formData, skillLevel: level.value})}
+                      >
+                        <span className="option-icon">{level.icon}</span>
+                        <h4>{level.value}</h4>
+                        <p>{level.description}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Time Commitment */}
+                <div className="form-section">
+                  <label className="section-label">How much time can you commit?</label>
+                  <select 
+                    name="timeCommitment" 
+                    value={formData.timeCommitment} 
+                    onChange={handleChange}
+                    className="custom-select"
+                  >
+                    <option value="5 hours per week">⏰ 5 hours/week - Weekend warrior</option>
+                    <option value="10 hours per week">⏱️ 10 hours/week - Steady progress</option>
+                    <option value="15 hours per week">⏲️ 15 hours/week - Accelerated</option>
+                    <option value="20+ hours per week">🕐 20+ hours/week - Full immersion</option>
+                  </select>
+                </div>
+
+                {/* Learning Style */}
+                <div className="form-section">
+                  <label className="section-label">What's your learning style?</label>
+                  <div className="option-cards">
+                    {learningStyles. map((style) => (
+                      <button
+                        key={style.value}
+                        type="button"
+                        className={`option-card ${formData.learningStyle === style.value ?  'active' : ''}`}
+                        onClick={() => setFormData({...formData, learningStyle: style.value})}
+                      >
+                        <span className="option-icon">{style.icon}</span>
+                        <h4>{style.value}</h4>
+                        <p>{style.description}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
               
-              <div className="form-row">
-                <label className="form-label">Learning Style</label>
-                <select 
-                  name="learningStyle" 
-                  value={formData.learningStyle} 
-                  onChange={handleChange}
-                  className="form-select"
+              <div className="step-actions">
+                <Button 
+                  variant="secondary"
+                  onClick={handlePrevious}
+                  icon={<FiArrowLeft />}
                 >
-                  <option value="Project-Based">🛠️ Project-Based</option>
-                  <option value="Theory-First">📚 Theory-First</option>
-                  <option value="Video Tutorials">🎥 Video Tutorials</option>
-                  <option value="Reading Documentation">📖 Documentation</option>
-                </select>
+                  Previous
+                </Button>
+                <Button 
+                  onClick={handleNext}
+                  icon={<FiArrowRight />}
+                >
+                  Review & Generate
+                </Button>
               </div>
-            </div>
-            
-            <div className="step-actions">
-              <button onClick={handlePrevious} className="btn btn-secondary">
-                ← Previous
-              </button>
-              <button onClick={handleNext} className="btn btn-primary">
-                Next →
-              </button>
-            </div>
-          </div>
+            </Card>
+          </motion.div>
         );
         
       case 3:
         return (
-          <div className="step-container compact">
-            <div className="step-header">
-              <h2>🚀 Ready to Generate? </h2>
-              <p>Let's create your personalized learning roadmap</p>
-            </div>
-            
-            <div className="summary-card">
-              <h3>📋 Your Profile</h3>
-              <div className="summary-items">
-                <div className="summary-item">
-                  <span className="summary-label">Goal:</span>
-                  <span className="summary-value">{formData.goal}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Level:</span>
-                  <span className="summary-value">{formData.skillLevel}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Time:</span>
-                  <span className="summary-value">{formData.timeCommitment}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Style:</span>
-                  <span className="summary-value">{formData. learningStyle}</span>
+          <motion.div 
+            className="step-container"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Card>
+              <div className="step-icon">
+                <FiCheckCircle />
+              </div>
+              <div className="step-header">
+                <h2>Ready to Generate? </h2>
+                <p>Review your selections and create your personalized roadmap</p>
+              </div>
+              
+              <div className="summary-content">
+                <div className="summary-grid">
+                  <div className="summary-item">
+                    <span className="summary-icon">🎯</span>
+                    <div>
+                      <label>Learning Goal</label>
+                      <p>{formData.goal}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="summary-item">
+                    <span className="summary-icon">📊</span>
+                    <div>
+                      <label>Skill Level</label>
+                      <p>{formData.skillLevel}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="summary-item">
+                    <span className="summary-icon">⏰</span>
+                    <div>
+                      <label>Time Commitment</label>
+                      <p>{formData.timeCommitment}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="summary-item">
+                    <span className="summary-icon">📚</span>
+                    <div>
+                      <label>Learning Style</label>
+                      <p>{formData.learningStyle}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="step-actions">
-              <button onClick={handlePrevious} className="btn btn-secondary">
-                ← Previous
-              </button>
-              <button onClick={handleGenerate} className="btn btn-success">
-                🎯 Generate Roadmap
-              </button>
-            </div>
-          </div>
+              
+              <div className="step-actions">
+                <Button 
+                  variant="secondary"
+                  onClick={handlePrevious}
+                  icon={<FiArrowLeft />}
+                >
+                  Previous
+                </Button>
+                <Button 
+                  variant="success"
+                  onClick={handleGenerate}
+                  size="lg"
+                  icon={<FiCheckCircle />}
+                >
+                  Generate My Roadmap
+                </Button>
+              </div>
+            </Card>
+          </motion.div>
         );
         
       case 4:
@@ -230,8 +353,7 @@ const PathfinderMVP = () => {
           <StepFour
             roadmapData={roadmapData}
             isLoading={isLoading}
-            error={error}
-            onPrevious={handleBackToDashboard}
+            onPrevious={handlePrevious}
           />
         );
         
@@ -242,25 +364,37 @@ const PathfinderMVP = () => {
 
   return (
     <div className="pathfinder-container">
-      <header className="app-header">
-        <div className="branding">
-          <img
-            src={logo}
-            alt="Pathfinder AI Logo"
-            className="app-logo"
-            loading="eager"
-            decoding="async"
-          />
-          <div className="branding-text">
-            <h1>Pathfinder AI</h1>
-            <p>Your Personalized Learning Journey</p>
+      {showConfetti && <Confetti recycle={false} numberOfPieces={500} />}
+      <Navbar />
+      
+      <div className="pathfinder-content">
+        {currentStep < 4 && (
+          <div className="progress-section">
+            <div className="progress-steps">
+              {[1, 2, 3]. map((step) => (
+                <div 
+                  key={step} 
+                  className={`progress-step ${currentStep >= step ? 'active' : ''} ${currentStep > step ? 'completed' : ''}`}
+                >
+                  <div className="step-number">{step}</div>
+                  <span className="step-label">
+                    {step === 1 ? 'Goal' : step === 2 ?  'Profile' : 'Review'}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="progress-bar-container">
+              <div 
+                className="progress-bar-fill" 
+                style={{ width: `${(currentStep / 3) * 100}%` }}
+              />
+            </div>
           </div>
-        </div>
-      </header>
+        )}
 
-      <ProgressBar currentStep={currentStep} totalSteps={4} />
-      <div className="step-content">
-        {renderStepContent()}
+        <AnimatePresence mode="wait">
+          {renderStepContent()}
+        </AnimatePresence>
       </div>
     </div>
   );

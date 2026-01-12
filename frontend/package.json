@@ -1,9 +1,9 @@
 {
   "name": "pathfinder-frontend",
   "private": true,
-  "version": "0.0.0",
-  "type":  "module",
-  "scripts":  {
+  "version":  "0.0.0",
+  "type": "module",
+  "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -12,7 +12,11 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.21.0"
+    "react-router-dom": "^6.21.0",
+    "framer-motion": "^11.0.0",
+    "react-icons": "^5.0.0",
+    "react-toastify": "^10.0.0",
+    "react-confetti": "^6.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

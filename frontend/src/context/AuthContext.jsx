@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext(null);
 
@@ -18,20 +19,27 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
+      console.log('🔍 Fetching user with token:', token ?  'Token exists' : 'No token');
+      
+      const response = await fetch(`${import.meta.env. VITE_API_BASE_URL}/auth/me`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization':  `Bearer ${token}`
         }
       });
 
+      console.log('📡 Auth response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('✅ User authenticated:', data. user);
         setUser(data.user);
       } else {
+        console.warn('⚠️ Auth failed, clearing session');
+        // Token is invalid or expired
         logout();
       }
     } catch (error) {
-      console.error('Failed to fetch user:', error);
+      console.error('❌ Failed to fetch user:', error);
       logout();
     } finally {
       setLoading(false);
@@ -39,48 +47,61 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (! response.ok) {
-      throw new Error(data.error || 'Login failed');
+      if (! response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      console.log('�� Login successful');
+      localStorage.setItem('token', data. token);
+      setToken(data.token);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      console.error('❌ Login error:', error);
+      throw error;
     }
-
-    localStorage.setItem('token', data.token);
-    setToken(data.token);
-    setUser(data.user);
-    return data;
   };
 
   const register = async (username, email, password) => {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON. stringify({ username, email, password })
-    });
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, email, password })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Registration failed');
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      console. log('✅ Registration successful');
+      localStorage.setItem('token', data. token);
+      setToken(data.token);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      console.error('❌ Registration error:', error);
+      throw error;
     }
-
-    localStorage.setItem('token', data.token);
-    setToken(data.token);
-    setUser(data.user);
-    return data;
   };
 
   const logout = () => {
+    console.log('👋 Logging out');
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
@@ -93,7 +114,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user && !!token
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
