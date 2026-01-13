@@ -278,3 +278,29 @@ h6 {
   }
 }
 
+/* Force dark backgrounds everywhere */
+body, #root {
+  background:  #0f172a ! important;
+  color: #f8fafc ! important;
+}
+
+/* Ensure all text is visible */
+h1, h2, h3, h4, h5, h6, p, span, div, label {
+  color: inherit;
+}
+
+/* Fix any white backgrounds */
+.step-container {
+  background: transparent !important;
+}
+
+/* Ensure buttons have proper colors */
+button {
+  color: inherit;
+}
+
+/* Fix input fields */
+input, textarea, select {
+  color: #f8fafc;
+  background: #1e293b;
+}

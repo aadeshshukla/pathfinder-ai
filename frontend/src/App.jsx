@@ -38,7 +38,7 @@ function App() {
             </ProtectedRoute>
           } />
           
-          <Route path="/roadmap/: id" element={
+          <Route path="/roadmap/:id" element={
             <ProtectedRoute>
               <RoadmapView />
             </ProtectedRoute>

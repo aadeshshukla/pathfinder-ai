@@ -28,9 +28,14 @@
   margin-bottom: 24px;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .loading-container p {
   font-size: 1.25rem;
   margin:  0;
+  color: #cbd5e1;
 }
 
 /* Header */
@@ -46,12 +51,14 @@
 .roadmap-actions-group {
   display: flex;
   gap: 12px;
-  flex-wrap:  wrap;
+  flex-wrap: wrap;
 }
 
 /* Roadmap Info Card */
 .roadmap-info-card {
   margin-bottom: 32px;
+  background: #1e293b ! important;
+  border: 1px solid #334155 !important;
 }
 
 .info-header {
@@ -65,12 +72,12 @@
 .info-header h1 {
   font-size: 2.5rem;
   color: #f8fafc;
-  margin: 0 0 8px 0;
+  margin:  0 0 8px 0;
   font-weight: 700;
 }
 
 .roadmap-date {
-  font-size:  1rem;
+  font-size: 1rem;
   color: #94a3b8;
   margin:  0;
 }
@@ -130,20 +137,51 @@
 }
 
 .info-box p {
-  font-size: 1.125rem;
+  font-size: 1. 125rem;
   color: #f8fafc;
-  margin: 0;
+  margin:  0;
   font-weight: 500;
+}
+
+/* Error Container */
+.error-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 48px 24px;
+}
+
+.error-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 40px;
+  background: #1e293b;
+  border-radius: 20px;
+  border: 2px solid #ef4444;
+}
+
+.error-content h2 {
+  font-size: 2rem;
+  color: #f8fafc;
+  margin: 0 0 16px 0;
+}
+
+.error-content p {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin: 0 0 32px 0;
+  line-height: 1.6;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .roadmap-view-container {
-    padding:  24px 16px;
+    padding: 24px 16px;
   }
 
   .roadmap-header {
-    flex-direction:  column;
+    flex-direction: column;
     align-items: stretch;
   }
 
@@ -166,32 +204,5 @@
   .info-grid {
     grid-template-columns: 1fr;
   }
-}
-/* Add to the end of the existing file */
-
-.error-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  padding: 48px 24px;
-}
-
-.error-content {
-  text-align: center;
-  max-width: 500px;
-}
-
-.error-content h2 {
-  font-size: 2rem;
-  color: #f8fafc;
-  margin:  0 0 16px 0;
-}
-
-.error-content p {
-  font-size: 1.125rem;
-  color: #94a3b8;
-  margin: 0 0 32px 0;
-  line-height: 1.6;
 }
 

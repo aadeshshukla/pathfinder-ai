@@ -15,15 +15,16 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount to prevent infinite loops
 
   const fetchUser = async () => {
     try {
       console.log('🔍 Fetching user with token:', token ?  'Token exists' : 'No token');
       
-      const response = await fetch(`${import.meta.env. VITE_API_BASE_URL}/auth/me`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
         headers: {
-          'Authorization':  `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -31,16 +32,22 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ User authenticated:', data. user);
+        console.log('✅ User authenticated:', data.user);
         setUser(data.user);
       } else {
         console.warn('⚠️ Auth failed, clearing session');
-        // Token is invalid or expired
-        logout();
+        // Don't call logout() to prevent infinite loops
+        // Just clear the state directly
+        localStorage.removeItem('token');
+        setToken(null);
+        setUser(null);
       }
     } catch (error) {
       console.error('❌ Failed to fetch user:', error);
-      logout();
+      // Don't call logout() to prevent infinite loops
+      localStorage.removeItem('token');
+      setToken(null);
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -48,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+      const response = await fetch(`${import.meta.env. VITE_API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -58,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
-      if (! response.ok) {
+      if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
 
@@ -66,6 +73,9 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', data. token);
       setToken(data.token);
       setUser(data.user);
+      
+      // Refresh the page to trigger useEffect and fetch user
+      // This ensures clean state after login
       return data;
     } catch (error) {
       console.error('❌ Login error:', error);
@@ -90,7 +100,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       console. log('✅ Registration successful');
-      localStorage.setItem('token', data. token);
+      localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
       return data;

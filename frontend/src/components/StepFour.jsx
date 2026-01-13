@@ -1,7 +1,7 @@
 import React from 'react';
 import './StepFour.css';
 
-const StepFour = ({ roadmapData, isLoading, error, onPrevious }) => {
+const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false }) => {
   if (isLoading) {
     return (
       <div className="step-container compact">
@@ -42,69 +42,153 @@ const StepFour = ({ roadmapData, isLoading, error, onPrevious }) => {
     );
   }
 
+  // Debug:  Log the roadmap data structure
+  console. log('📊 Roadmap Data Structure:', roadmapData);
+
+  // Flexible data extraction - handle multiple possible structures
+  const getMilestones = () => {
+    // Try different possible property names
+    if (roadmapData.milestones) return roadmapData.milestones;
+    if (roadmapData.phases) return roadmapData.phases;
+    if (roadmapData.steps) return roadmapData.steps;
+    if (roadmapData.modules) return roadmapData.modules;
+    if (Array.isArray(roadmapData)) return roadmapData;
+    
+    // If it's an object with nested data, try to extract array
+    const values = Object.values(roadmapData);
+    const firstArray = values. find(val => Array.isArray(val));
+    if (firstArray) return firstArray;
+    
+    return [];
+  };
+
+  const getTimeline = () => {
+    if (roadmapData.timeline?. totalDays) return roadmapData.timeline. totalDays;
+    if (roadmapData.totalDays) return roadmapData.totalDays;
+    if (roadmapData.duration) return roadmapData.duration;
+    return null;
+  };
+
+  const getResources = () => {
+    if (roadmapData.resources) return roadmapData.resources;
+    if (roadmapData.recommendedResources) return roadmapData.recommendedResources;
+    return [];
+  };
+
+  const milestones = getMilestones();
+  const totalDays = getTimeline();
+  const resources = getResources();
+
+  // If no milestones found, show raw JSON for debugging
+  if (milestones.length === 0) {
+    return (
+      <div className="roadmap-view">
+        <div className="roadmap-header">
+          <h1>🎯 Your Learning Roadmap</h1>
+        </div>
+        <div className="roadmap-content">
+          <div className="debug-view">
+            <h3>⚠️ Roadmap Structure Not Recognized</h3>
+            <p>Here's the raw data received: </p>
+            <pre className="debug-json">
+              {JSON.stringify(roadmapData, null, 2)}
+            </pre>
+          </div>
+        </div>
+        <div className="roadmap-actions">
+          <button onClick={onPrevious} className="btn btn-primary">
+            {viewMode ? '← Back' : '🆕 Create New Roadmap'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="roadmap-view">
       <div className="roadmap-header">
         <h1>🎯 Your Learning Roadmap is Ready!</h1>
-        <div className="roadmap-meta">
-          <span className="duration-badge">
-            ⏱️ {roadmapData.timeline.totalDays} days total
-          </span>
-          <span className="milestone-count">
-            🎯 {roadmapData.milestones.length} milestones
-          </span>
-        </div>
+        {(totalDays || milestones.length > 0) && (
+          <div className="roadmap-meta">
+            {totalDays && (
+              <span className="duration-badge">
+                ⏱️ {totalDays} days total
+              </span>
+            )}
+            <span className="milestone-count">
+              🎯 {milestones.length} milestones
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="roadmap-content">
-        {roadmapData.milestones.map((milestone, index) => (
-          <div key={milestone.id || index} className="milestone-card">
-            <div className="milestone-header">
-              <span className="milestone-number">{index + 1}</span>
-              <div className="milestone-info">
-                <h3>{milestone.title}</h3>
-                <div className="milestone-duration">
-                  📅 {milestone.estimatedDays} days
+        {milestones.map((milestone, index) => {
+          // Flexible property extraction for each milestone
+          const title = milestone.title || milestone.name || milestone.phase || `Phase ${index + 1}`;
+          const description = milestone.description || milestone.desc || milestone.summary || '';
+          const duration = milestone.estimatedDays || milestone.duration || milestone.days || '';
+          const tasks = milestone.tasks || milestone.steps || milestone.activities || [];
+
+          return (
+            <div key={milestone.id || index} className="milestone-card">
+              <div className="milestone-header">
+                <span className="milestone-number">{index + 1}</span>
+                <div className="milestone-info">
+                  <h3>{title}</h3>
+                  {duration && (
+                    <div className="milestone-duration">
+                      📅 {duration} {typeof duration === 'number' ? 'days' : ''}
+                    </div>
+                  )}
                 </div>
               </div>
+              
+              {description && (
+                <p className="milestone-description">{description}</p>
+              )}
+              
+              {tasks && tasks.length > 0 && (
+                <div className="milestone-tasks">
+                  <h4>📋 Key Tasks</h4>
+                  <ul className="task-list">
+                    {tasks. map((task, taskIndex) => (
+                      <li key={taskIndex} className="task-item">
+                        {typeof task === 'string' ? task : task.title || task.name || JSON.stringify(task)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-            
-            <p className="milestone-description">{milestone.description}</p>
-            
-            {milestone.tasks && milestone.tasks.length > 0 && (
-              <div className="milestone-tasks">
-                <h4>📋 Key Tasks</h4>
-                <ul className="task-list">
-                  {milestone.tasks.map((task, taskIndex) => (
-                    <li key={taskIndex} className="task-item">
-                      {task}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
 
-        {roadmapData.resources && roadmapData.resources.length > 0 && (
+        {resources && resources.length > 0 && (
           <div className="resources-section">
             <h2>📚 Recommended Resources</h2>
             <div className="resources-grid">
-              {roadmapData.resources.map((resource, index) => (
-                <a
-                  key={index}
-                  href={resource.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="resource-card"
-                >
-                  <span className={`resource-badge ${resource.type.toLowerCase()}`}>
-                    {resource.type}
-                  </span>
-                  <span className="resource-name">{resource.name}</span>
-                  <span className="external-link">↗</span>
-                </a>
-              ))}
+              {resources.map((resource, index) => {
+                const name = resource.name || resource.title || `Resource ${index + 1}`;
+                const link = resource.link || resource.url || '#';
+                const type = resource. type || 'Resource';
+
+                return (
+                  <a
+                    key={index}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="resource-card"
+                  >
+                    <span className={`resource-badge ${type.toLowerCase()}`}>
+                      {type}
+                    </span>
+                    <span className="resource-name">{name}</span>
+                    <span className="external-link">↗</span>
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
@@ -112,7 +196,7 @@ const StepFour = ({ roadmapData, isLoading, error, onPrevious }) => {
 
       <div className="roadmap-actions">
         <button onClick={onPrevious} className="btn btn-primary">
-          🆕 Create New Roadmap
+          {viewMode ? '← Back to Dashboard' : '🆕 Create New Roadmap'}
         </button>
       </div>
     </div>
