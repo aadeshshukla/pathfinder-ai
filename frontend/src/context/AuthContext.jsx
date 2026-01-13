@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.error || 'Login failed');
       }
 
-      console.log('�� Login successful');
+      console.log('✅ Login successful');
       localStorage.setItem('token', data. token);
       setToken(data.token);
       setUser(data.user);
