@@ -2,32 +2,34 @@
   display: flex;
   min-height: 100vh;
   background: #0f172a;
+  overflow-x: hidden;
 }
 
 /* Form Section */
 .auth-form-section {
   flex: 1;
-  display: flex;
+  display:  flex;
   align-items: center;
   justify-content: center;
-  padding: 48px 24px;
+  padding: 24px 16px;
   position: relative;
   z-index: 1;
+  overflow-y: auto;
 }
 
 .auth-form-container {
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
 }
 
 .auth-logo-link {
   display: inline-block;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .auth-logo {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   transition: transform 0.3s ease;
 }
 
@@ -36,92 +38,94 @@
 }
 
 .auth-header {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .auth-header h1 {
-  font-size: 2.5rem;
+  font-size:  2rem;
   color: #f8fafc;
-  margin:  0 0 12px 0;
+  margin:  0 0 8px 0;
   font-weight: 700;
 }
 
 .auth-header p {
   color: #94a3b8;
-  font-size: 1.125rem;
-  margin:  0;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* Form */
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .form-group label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-weight: 600;
   color: #cbd5e1;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
 }
 
 .form-group label svg {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #6366f1;
 }
 
 .form-group input {
-  padding:  14px 18px;
+  padding:  12px 14px;
   background: #1e293b;
   border: 2px solid #334155;
-  border-radius:  12px;
-  font-size:  1rem;
-  color:  #f8fafc;
+  border-radius: 10px;
+  font-size:  0.95rem;
+  color: #f8fafc;
   transition:  all 0.3s ease;
   font-family: inherit;
 }
 
 .form-group input:focus {
-  outline: none;
-  border-color: #6366f1;
+  outline:  none;
+  border-color:  #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .form-group input::placeholder {
-  color:  #64748b;
+  color: #64748b;
 }
 
 .input-error {
   color: #ef4444;
-  font-size: 0.875rem;
+  font-size: 0.813rem;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  margin-top: -2px;
 }
 
 /* Password Strength */
 .password-strength {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  margin-top: -4px;
 }
 
 .strength-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size:  0.875rem;
-  padding: 6px 0;
+  gap: 6px;
+  font-size:  0.813rem;
+  padding: 4px 0;
 }
 
 .strength-indicator.valid {
@@ -133,19 +137,20 @@
 }
 
 .strength-indicator svg {
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 /* Auth Footer */
 .auth-footer {
   text-align: center;
-  padding-top: 24px;
+  padding-top: 16px;
   border-top:  1px solid #334155;
 }
 
 .auth-footer p {
   color: #94a3b8;
   margin: 0;
+  font-size: 0.875rem;
 }
 
 .auth-footer a {
@@ -179,17 +184,17 @@
 }
 
 .auth-hero-content h2 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #f8fafc;
-  margin: 0 0 20px 0;
+  margin: 0 0 16px 0;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .auth-hero-content > p {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   color: #94a3b8;
-  margin: 0 0 48px 0;
+  margin: 0 0 40px 0;
   line-height: 1.6;
 }
 
@@ -197,29 +202,29 @@
 .auth-features {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .feature-item {
   display: flex;
-  gap: 20px;
-  align-items:  flex-start;
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .feature-icon {
-  font-size: 2.5rem;
+  font-size: 2rem;
   flex-shrink: 0;
 }
 
 .feature-item h4 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   color: #f8fafc;
-  margin:  0 0 8px 0;
+  margin: 0 0 6px 0;
   font-weight: 600;
 }
 
 .feature-item p {
-  font-size: 1rem;
+  font-size: 0.938rem;
   color: #94a3b8;
   margin: 0;
   line-height: 1.5;
@@ -234,6 +239,7 @@
   left:  0;
   z-index: 1;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .shape {
@@ -252,7 +258,7 @@
 }
 
 .shape-2 {
-  width:  300px;
+  width: 300px;
   height: 300px;
   bottom: -50px;
   left: -50px;
@@ -283,27 +289,127 @@
   }
 }
 
-/* Responsive */
-@media (max-width:  1024px) {
+/* Responsive - Mobile First */
+@media (max-width: 1024px) {
   .auth-hero-section {
     display: none;
   }
   
   .auth-form-section {
     flex:  1;
+    padding: 16px;
   }
 }
 
 @media (max-width:  640px) {
+  .auth-page {
+    min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS fix */
+  }
+
   .auth-form-section {
-    padding: 24px 16px;
+    padding: 12px;
+    align-items: flex-start;
+    padding-top: 20px;
   }
-  
+
+  .auth-form-container {
+    max-width: 100%;
+  }
+
+  .auth-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .auth-logo-link {
+    margin-bottom: 16px;
+  }
+
+  .auth-header {
+    margin-bottom: 20px;
+  }
+
   .auth-header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
-  
+
   .auth-header p {
-    font-size:  1rem;
+    font-size: 0.875rem;
+  }
+
+  .auth-form {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    gap:  5px;
+  }
+
+  .form-group input {
+    padding: 11px 12px;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.813rem;
+  }
+
+  .password-strength {
+    gap: 3px;
+  }
+
+  .strength-indicator {
+    font-size: 0.75rem;
+    padding: 3px 0;
+  }
+
+  .auth-footer {
+    padding-top:  12px;
+  }
+
+  .auth-footer p {
+    font-size: 0.813rem;
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 896px) and (max-height: 428px) and (orientation: landscape) {
+  .auth-form-section {
+    padding: 8px 16px;
+  }
+
+  .auth-header {
+    margin-bottom: 12px;
+  }
+
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-form {
+    gap: 10px;
+    margin-bottom:  12px;
+  }
+
+  .form-group input {
+    padding: 8px 10px;
+  }
+
+  .auth-footer {
+    padding-top: 8px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width:  360px) {
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-group input {
+    padding:  10px 12px;
   }
 }

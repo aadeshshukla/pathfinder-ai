@@ -408,7 +408,181 @@
     width: 100%;
   }
 }
+/* Add to the end of PathfinderMVP.css */
 
+/* Enhanced Mobile Optimization */
+@media (max-width: 768px) {
+  .pathfinder-content {
+    padding: 20px 16px;
+  }
+
+  .progress-steps {
+    gap: 16px;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+  }
+
+  .step-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .step-header h2 {
+    font-size:  1.5rem;
+  }
+
+  .step-header p {
+    font-size:  1rem;
+  }
+
+  .goal-textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+    padding: 14px;
+  }
+
+  .popular-label {
+    font-size: 0.875rem;
+  }
+
+  .goal-chips {
+    flex-direction: column;
+  }
+
+  .goal-chip {
+    width: 100%;
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  .option-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .option-card {
+    padding:  20px 16px;
+  }
+
+  .option-icon {
+    font-size: 2rem;
+  }
+
+  .option-card h4 {
+    font-size:  0.938rem;
+  }
+
+  .option-card p {
+    font-size: 0.813rem;
+  }
+
+  .custom-select {
+    font-size: 16px; /* Prevents iOS zoom */
+    padding: 14px;
+  }
+
+  .section-label {
+    font-size: 1rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-item {
+    padding: 16px;
+  }
+
+  .summary-icon {
+    font-size: 1.75rem;
+  }
+
+  .summary-item label {
+    font-size: 0.75rem;
+  }
+
+  .summary-item p {
+    font-size: 0.938rem;
+  }
+
+  .step-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .step-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pathfinder-content {
+    padding: 16px 12px;
+  }
+
+  .progress-steps {
+    gap: 12px;
+    padding: 0 8px;
+  }
+
+  .step-number {
+    width:  36px;
+    height:  36px;
+    font-size: 0.938rem;
+  }
+
+  .step-label {
+    font-size: 0.688rem;
+  }
+
+  .step-header h2 {
+    font-size: 1.375rem;
+  }
+
+  .step-header p {
+    font-size: 0.938rem;
+  }
+
+  .form-content {
+    margin-bottom: 32px;
+  }
+
+  .form-section {
+    margin-bottom: 32px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 896px) and (max-height: 428px) and (orientation: landscape) {
+  .pathfinder-content {
+    padding: 12px 16px;
+  }
+
+  .step-header {
+    margin-bottom: 20px;
+  }
+
+  .step-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .form-content {
+    margin-bottom: 20px;
+  }
+
+  .step-actions {
+    padding-top: 16px;
+  }
+}
 
 
   

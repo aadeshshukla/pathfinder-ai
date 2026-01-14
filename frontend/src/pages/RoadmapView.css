@@ -205,4 +205,86 @@
     grid-template-columns: 1fr;
   }
 }
+/* Add to the end of RoadmapView.css */
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+  .roadmap-view-container {
+    padding: 20px 16px;
+  }
+
+  .roadmap-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .roadmap-actions-group {
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .roadmap-actions-group button {
+    flex: 1;
+    font-size: 0.875rem;
+    padding: 10px 12px;
+  }
+
+  .roadmap-info-card {
+    padding: 20px;
+  }
+
+  .info-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .info-header h1 {
+    font-size:  1.875rem;
+  }
+
+  .roadmap-date {
+    font-size: 0.875rem;
+  }
+
+  .skill-badge-large {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .info-box {
+    padding: 16px;
+  }
+
+  .info-box svg {
+    font-size: 1.5rem;
+  }
+
+  .info-box p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .roadmap-view-container {
+    padding: 16px 12px;
+  }
+
+  .info-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .roadmap-actions-group {
+    flex-direction: column;
+  }
+
+  .roadmap-actions-group button {
+    width: 100%;
+  }
+}
 

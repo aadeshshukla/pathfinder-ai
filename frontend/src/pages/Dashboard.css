@@ -362,3 +362,160 @@
     flex: 1;
   }
 }
+
+/* Add these mobile optimizations to the end of Dashboard.css */
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .welcome-section {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .welcome-content h1 {
+    font-size:  1.875rem;
+  }
+
+  .welcome-content p {
+    font-size: 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width:  768px) {
+  .dashboard-container {
+    padding: 20px 16px;
+  }
+
+  .welcome-section {
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .welcome-content h1 {
+    font-size: 1.625rem;
+  }
+
+  .welcome-content p {
+    font-size: 0.938rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .section-controls {
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .view-toggle {
+    width: 100%;
+  }
+
+  .view-toggle button {
+    flex:  1;
+  }
+  
+  .roadmaps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
+  }
+
+  .stat-content h3 {
+    font-size: 1.75rem;
+  }
+
+  .roadmap-card {
+    padding: 20px;
+  }
+
+  .roadmap-card-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .roadmap-card-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .roadmap-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .roadmap-actions button {
+    flex: 1;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 16px 12px;
+  }
+
+  .welcome-section {
+    padding:  16px;
+    margin-bottom: 24px;
+  }
+
+  .welcome-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.375rem;
+  }
+
+  .stat-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .empty-state {
+    padding: 60px 16px;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size:  1.25rem;
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+  }
+}

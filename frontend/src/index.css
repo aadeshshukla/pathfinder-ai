@@ -304,3 +304,83 @@ input, textarea, select {
   color: #f8fafc;
   background: #1e293b;
 }
+/* Add to the end of index.css */
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.875rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+  }
+
+  /* Prevent iOS zoom on form fields */
+  input,
+  textarea,
+  select {
+    font-size: 16px ! important;
+  }
+
+  /* Better touch targets */
+  button,
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS viewport height fix */
+  .auth-page,
+  .dashboard-page,
+  .roadmap-view-page {
+    min-height: -webkit-fill-available;
+  }
+
+  /* iOS input zoom prevention */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Landscape optimization */
+@media (max-width: 896px) and (max-height: 428px) and (orientation: landscape) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size:  1.25rem;
+  }
+}
+
+/* Very small devices */
+@media (max-width:  360px) {
+  body {
+    font-size: 14px;
+  }
+}
