@@ -1,5 +1,5 @@
-// The VERY FIRST line of your application should be to load the config. 
-import './config.js';
+// The VERY FIRST line of your application should be to load the config.  
+import './config. js';
 
 import express from 'express';
 import cors from 'cors';
@@ -12,11 +12,18 @@ connectDB();
 
 // --- Server Setup ---
 const app = express();
-const PORT = process.env.PORT || 3001;
-const frontendURL = process.env. FRONTEND_URL || 'http://localhost:5173';
+const PORT = process.env. PORT || 3001;
+
+// Updated CORS configuration for Vercel
 const corsOptions = {
-  origin: frontendURL,
-  credentials: true
+  origin: [
+    'http://localhost:5173', // Development
+    'https://pathfinder-ai-mu.vercel.app', // Production - replace with your actual Vercel URL
+    process.env.FRONTEND_URL // From environment variable
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 // --- Middleware ---
@@ -38,6 +45,6 @@ app.listen(PORT, () => {
   if (process.env. GROQ_API_KEY) {
     console.log('✅ Groq API Key loaded successfully.');
   } else {
-    console.error('❌ FATAL ERROR: GROQ_API_KEY not found! ');
+    console.error('❌ FATAL ERROR:  GROQ_API_KEY not found! ');
   }
 });
