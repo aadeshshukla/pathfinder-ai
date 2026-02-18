@@ -1,6 +1,20 @@
 import React from 'react';
 import './StepFour.css';
 
+// Helper function to get emoji icon for resource type
+const getResourceIcon = (type) => {
+  const icons = {
+    'Video': '🎥',
+    'Article': '📖',
+    'Course': '💻',
+    'Documentation': '📄',
+    'Book': '📕',
+    'Tool': '🔧',
+    'Repository': '🗂️'
+  };
+  return icons[type] || '📎';
+};
+
 const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false }) => {
   if (isLoading) {
     return (
@@ -158,6 +172,33 @@ const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false 
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {milestone.resources && milestone.resources.length > 0 && (
+                <div className="milestone-resources">
+                  <h4>📚 Resources for this milestone</h4>
+                  <div className="milestone-resources-list">
+                    {milestone.resources.map((resource, resIndex) => {
+                      const icon = getResourceIcon(resource.type);
+                      return (
+                        <a
+                          key={resIndex}
+                          href={resource.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`milestone-resource-item ${resource.type?.toLowerCase() || ''}`}
+                        >
+                          <span className="resource-icon">{icon}</span>
+                          <span className="resource-details">
+                            <span className="resource-name">{resource.name}</span>
+                            <span className="resource-type">{resource.type}</span>
+                          </span>
+                          <span className="external-link-icon">↗</span>
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>

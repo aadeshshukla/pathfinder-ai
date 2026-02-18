@@ -587,5 +587,125 @@
   }
 }
   
+/* Milestone-level Resources */
+.milestone-resources {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #334155;
+}
+
+.milestone-resources h4 {
+  color: #f8fafc;
+  font-size: 1.125rem;
+  margin: 0 0 16px 0;
+  font-weight: 700;
+}
+
+.milestone-resources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.milestone-resource-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.milestone-resource-item:hover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateX(4px);
+}
+
+.milestone-resource-item.video {
+  border-left: 3px solid #ef4444;
+}
+
+.milestone-resource-item.article {
+  border-left: 3px solid #f59e0b;
+}
+
+.milestone-resource-item.course {
+  border-left: 3px solid #10b981;
+}
+
+.milestone-resource-item.documentation {
+  border-left: 3px solid #3b82f6;
+}
+
+.milestone-resource-item.book {
+  border-left: 3px solid #8b5cf6;
+}
+
+.milestone-resource-item.tool {
+  border-left: 3px solid #06b6d4;
+}
+
+.milestone-resource-item.repository {
+  border-left: 3px solid #64748b;
+}
+
+.resource-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.resource-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.milestone-resource-item .resource-name {
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.milestone-resource-item .resource-type {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.external-link-icon {
+  color: #6366f1;
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .milestone-resources h4 {
+    font-size: 1rem;
+  }
+
+  .milestone-resource-item {
+    padding: 12px;
+  }
+
+  .resource-icon {
+    font-size: 1.25rem;
+  }
+
+  .milestone-resource-item .resource-name {
+    font-size: 0.938rem;
+  }
+
+  .milestone-resource-item .resource-type {
+    font-size: 0.813rem;
+  }
+}
+  
   
   

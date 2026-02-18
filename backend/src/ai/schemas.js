@@ -73,6 +73,30 @@ export const roadmapSchema = {
               "type": "string"
             },
             "description": "array of actionable tasks for this milestone"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "link"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "name of the resource"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["Video", "Article", "Course", "Documentation", "Book", "Tool", "Repository"],
+                  "description": "type of the resource"
+                },
+                "link": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "valid URL to the resource"
+                }
+              }
+            },
+            "description": "milestone-specific learning resources"
           }
         }
       }
@@ -138,6 +162,18 @@ Return ONLY JSON matching this exact structure:
         "Specific task 1",
         "Specific task 2",
         "Specific task 3"
+      ],
+      "resources": [
+        {
+          "name": "Resource Name for This Milestone",
+          "type": "Video",
+          "link": "https://example.com/resource"
+        },
+        {
+          "name": "Another Resource for This Milestone",
+          "type": "Article",
+          "link": "https://example.com/article"
+        }
       ]
     }
   ],
@@ -147,9 +183,9 @@ Return ONLY JSON matching this exact structure:
   },
   "resources": [
     {
-      "name": "Resource Name",
-      "type": "Video",
-      "link": "https://example.com/resource"
+      "name": "General Reference Resource",
+      "type": "Documentation",
+      "link": "https://example.com/docs"
     }
   ],
   "tips": [
@@ -158,7 +194,9 @@ Return ONLY JSON matching this exact structure:
   ]
 }
 
-CRITICAL: The "timeline" object MUST include BOTH "totalDays" (number) AND "rationale" (string) fields.
-No prose, no markdown fences, no extra keys — only that JSON object.
+CRITICAL: 
+- Each milestone MUST include a "resources" array with 2-3 relevant resources
+- The "timeline" object MUST include BOTH "totalDays" (number) AND "rationale" (string) fields
+- No prose, no markdown fences, no extra keys — only that JSON object.
 `;
   

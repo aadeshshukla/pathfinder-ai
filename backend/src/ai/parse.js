@@ -24,26 +24,33 @@ export function parseRoadmapJSON(text) {
     let totalDays = 0;
     if (typeof data.timeline.totalDays === 'number') {
       totalDays = data.timeline.totalDays;
-      console.log('✅ AI provided timeline.totalDays:', totalDays);
     } else {
       // Calculate manually if missing
-      console.warn('⚠️  Warning: timeline.totalDays missing from AI response. Calculating manually.');
       totalDays = data.milestones.reduce((sum, milestone) => {
         const days = typeof milestone.estimatedDays === 'number' ? milestone.estimatedDays : 0;
         return sum + days;
       }, 0);
-      console.log('🔧 Calculated totalDays manually:', totalDays);
     }
 
-    // 5. Validate resources
+    // 5. Process milestones and preserve milestone-level resources
+    const processedMilestones = data.milestones.map(milestone => ({
+      id: milestone.id,
+      title: milestone.title,
+      description: milestone.description,
+      estimatedDays: milestone.estimatedDays,
+      tasks: milestone.tasks || [],
+      // Preserve milestone-level resources if they exist
+      ...(milestone.resources && Array.isArray(milestone.resources) && { resources: milestone.resources })
+    }));
+
+    // 6. Validate global resources
     if (!Array.isArray(data.resources)) {
-      console.warn('⚠️  Warning: Resources array missing from AI response. Defaulting to empty.');
       data.resources = [];
     }
 
-    // 6. Return the fully validated roadmap object
+    // 7. Return the fully validated roadmap object
     return {
-      milestones: data.milestones,
+      milestones: processedMilestones,
       timeline: {
         totalDays: totalDays,
         rationale: data.timeline.rationale || 'Timeline calculated based on milestone estimates'
