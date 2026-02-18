@@ -71,7 +71,11 @@ router.get('/:id', authenticate, async (req, res) => {
       return res.status(404).json({ error: 'Roadmap not found' });
     }
 
-    res.json(roadmap);
+    // Convert progress Map to plain object for JSON serialization
+    const roadmapObj = roadmap.toObject();
+    roadmapObj.progress = roadmap.progress ? Object.fromEntries(roadmap.progress) : {};
+
+    res.json(roadmapObj);
   } catch (error) {
     console.error('Error fetching roadmap:', error);
     res.status(500).json({ error: 'Failed to fetch roadmap' });
@@ -94,6 +98,57 @@ router.delete('/: id', authenticate, async (req, res) => {
   } catch (error) {
     console.error('Error deleting roadmap:', error);
     res.status(500).json({ error: 'Failed to delete roadmap' });
+  }
+});
+
+// Update progress for a task in a milestone
+router.patch('/:id/progress', authenticate, async (req, res) => {
+  try {
+    const { milestoneIndex, taskIndex, completed } = req.body;
+    
+    if (typeof milestoneIndex !== 'number' || typeof taskIndex !== 'number' || typeof completed !== 'boolean') {
+      return res.status(400).json({ error: 'Invalid request data' });
+    }
+
+    const roadmap = await Roadmap.findOne({
+      _id: req.params.id,
+      userId: req.userId
+    });
+
+    if (!roadmap) {
+      return res.status(404).json({ error: 'Roadmap not found' });
+    }
+
+    // Get current progress or initialize empty map
+    const progress = roadmap.progress || new Map();
+    const milestoneKey = milestoneIndex.toString();
+    
+    // Get current completed tasks for this milestone
+    let completedTasks = progress.get(milestoneKey) || [];
+    
+    if (completed) {
+      // Add task if not already in array
+      if (!completedTasks.includes(taskIndex)) {
+        completedTasks.push(taskIndex);
+      }
+    } else {
+      // Remove task from array
+      completedTasks = completedTasks.filter(t => t !== taskIndex);
+    }
+    
+    // Update progress map
+    progress.set(milestoneKey, completedTasks);
+    roadmap.progress = progress;
+    
+    await roadmap.save();
+    
+    res.json({ 
+      success: true,
+      progress: Object.fromEntries(roadmap.progress)
+    });
+  } catch (error) {
+    console.error('Error updating progress:', error);
+    res.status(500).json({ error: 'Failed to update progress' });
   }
 });
 

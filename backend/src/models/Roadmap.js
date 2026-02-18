@@ -30,6 +30,11 @@ const roadmapSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     required: true
   },
+  progress: {
+    type: Map,
+    of: [Number],
+    default: new Map()
+  },
   createdAt: {
     type: Date,
     default:  Date.now

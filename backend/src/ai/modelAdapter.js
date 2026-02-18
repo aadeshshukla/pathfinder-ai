@@ -13,7 +13,6 @@ const groq = new Groq({
  */
 async function generateRoadmap(userInput) {
   const prompt = buildPrompt(userInput);
-  console.log('Sending request to Groq API...');
 
   try {
     const chatCompletion = await groq.chat.completions.create({
@@ -30,7 +29,6 @@ async function generateRoadmap(userInput) {
       throw new Error('Received an empty response from Groq API.');
     }
     
-    console.log('Successfully received response from Groq API.');
     return jsonString; // Return the raw string
 
   } catch (error) {
