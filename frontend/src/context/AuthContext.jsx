@@ -20,22 +20,16 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      console.log('🔍 Fetching user with token:', token ?  'Token exists' : 'No token');
-      
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
-      console.log('📡 Auth response status:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ User authenticated:', data.user);
         setUser(data.user);
       } else {
-        console.warn('⚠️ Auth failed, clearing session');
         // Don't call logout() to prevent infinite loops
         // Just clear the state directly
         localStorage.removeItem('token');
@@ -43,7 +37,6 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
       }
     } catch (error) {
-      console.error('❌ Failed to fetch user:', error);
       // Don't call logout() to prevent infinite loops
       localStorage.removeItem('token');
       setToken(null);
@@ -69,7 +62,6 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.error || 'Login failed');
       }
 
-      console.log('✅ Login successful');
       localStorage.setItem('token', data. token);
       setToken(data.token);
       setUser(data.user);
@@ -78,7 +70,6 @@ export const AuthProvider = ({ children }) => {
       // This ensures clean state after login
       return data;
     } catch (error) {
-      console.error('❌ Login error:', error);
       throw error;
     }
   };
@@ -99,19 +90,16 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.error || 'Registration failed');
       }
 
-      console. log('✅ Registration successful');
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
       return data;
     } catch (error) {
-      console.error('❌ Registration error:', error);
       throw error;
     }
   };
 
   const logout = () => {
-    console.log('👋 Logging out');
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);

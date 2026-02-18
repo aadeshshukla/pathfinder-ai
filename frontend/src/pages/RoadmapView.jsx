@@ -23,7 +23,6 @@ const RoadmapView = () => {
     if (token) {
       fetchRoadmap();
     } else {
-      console.warn('⚠️ No token found, redirecting to login');
       toast.error('Please log in to view roadmaps');
       navigate('/login');
     }
@@ -31,19 +30,13 @@ const RoadmapView = () => {
 
   const fetchRoadmap = async () => {
     try {
-      console.log('🔍 Fetching roadmap:', id);
-      console.log('🔑 Token exists:', !!token);
-
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roadmap/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
-      console.log('📡 Roadmap fetch status:', response.status);
-
       if (response.status === 401) {
-        console.warn('⚠️ Unauthorized - token may be expired');
         toast.error('Session expired. Please log in again.');
         logout();
         navigate('/login');
@@ -55,10 +48,8 @@ const RoadmapView = () => {
       }
 
       const data = await response.json();
-      console.log('✅ Roadmap loaded successfully');
       setRoadmap(data);
     } catch (err) {
-      console.error('❌ Error fetching roadmap:', err);
       setError(err.message);
       toast.error('Failed to load roadmap');
       // Don't navigate away immediately, show error state
@@ -92,7 +83,6 @@ const RoadmapView = () => {
         throw new Error('Delete failed');
       }
     } catch (err) {
-      console.error('❌ Delete error:', err);
       toast.error('Failed to delete roadmap');
     }
   };

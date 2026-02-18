@@ -56,9 +56,6 @@ const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false 
     );
   }
 
-  // Debug:  Log the roadmap data structure
-  console. log('📊 Roadmap Data Structure:', roadmapData);
-
   // Flexible data extraction - handle multiple possible structures
   const getMilestones = () => {
     // Try different possible property names
