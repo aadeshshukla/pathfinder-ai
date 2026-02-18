@@ -1,5 +1,5 @@
 // The VERY FIRST line of your application should be to load the config.  
-import './config. js';
+import './config.js';
 
 import express from 'express';
 import cors from 'cors';
