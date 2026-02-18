@@ -8,6 +8,7 @@ import Navbar from '../components/ui/Navbar';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import StepFour from '../components/StepFour';
+import { generateRoadmapPDF } from '../utils/pdfExport';
 import './RoadmapView.css';
 
 const RoadmapView = () => {
@@ -97,7 +98,12 @@ const RoadmapView = () => {
   };
 
   const handleExport = () => {
-    toast.info('Export feature coming soon!  📄');
+    try {
+      generateRoadmapPDF(roadmap);
+      toast.success('PDF exported successfully! 📄');
+    } catch (err) {
+      toast.error('Failed to export PDF');
+    }
   };
 
   const handleShare = () => {
