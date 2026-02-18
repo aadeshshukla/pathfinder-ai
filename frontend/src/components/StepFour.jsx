@@ -15,7 +15,7 @@ const getResourceIcon = (type) => {
   return icons[type] || '📎';
 };
 
-const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false }) => {
+const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false, progress = {}, onToggleTask, roadmapId }) => {
   if (isLoading) {
     return (
       <div className="step-container compact">
@@ -162,12 +162,42 @@ const StepFour = ({ roadmapData, isLoading, error, onPrevious, viewMode = false 
               {tasks && tasks.length > 0 && (
                 <div className="milestone-tasks">
                   <h4>📋 Key Tasks</h4>
+                  {viewMode && (
+                    <div className="milestone-progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{
+                          width: `${(progress[index]?.length || 0) / tasks.length * 100}%`
+                        }}
+                      />
+                      <span className="progress-text">
+                        {progress[index]?.length || 0}/{tasks.length} complete
+                      </span>
+                    </div>
+                  )}
                   <ul className="task-list">
-                    {tasks. map((task, taskIndex) => (
-                      <li key={taskIndex} className="task-item">
-                        {typeof task === 'string' ? task : task.title || task.name || JSON.stringify(task)}
-                      </li>
-                    ))}
+                    {tasks. map((task, taskIndex) => {
+                      const taskText = typeof task === 'string' ? task : task.title || task.name || JSON.stringify(task);
+                      const isCompleted = viewMode && progress[index]?.includes(taskIndex);
+                      
+                      return (
+                        <li 
+                          key={taskIndex} 
+                          className={`task-item ${viewMode ? 'interactive' : ''} ${isCompleted ? 'completed' : ''}`}
+                          onClick={() => viewMode && onToggleTask && onToggleTask(index, taskIndex)}
+                        >
+                          {viewMode && (
+                            <input
+                              type="checkbox"
+                              checked={isCompleted}
+                              onChange={() => {}}
+                              className="task-checkbox"
+                            />
+                          )}
+                          <span className="task-text">{taskText}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}

@@ -170,6 +170,78 @@
   font-size: 0.875rem;
 }
 
+/* Progress Tracking Styles */
+.milestone-progress-bar {
+  position: relative;
+  height: 8px;
+  background: #1e293b;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+  background: #0f172a;
+  padding: 0 4px;
+}
+
+.task-item.interactive {
+  cursor: pointer;
+  padding-left: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-item.interactive::before {
+  display: none;
+}
+
+.task-item.interactive:hover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #6366f1;
+  border-radius: 4px;
+  position: absolute;
+  left: 16px;
+}
+
+.task-text {
+  flex: 1;
+}
+
+.task-item.completed {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
 /* Resources Section */
 .resources-section {
   margin-top: 48px;

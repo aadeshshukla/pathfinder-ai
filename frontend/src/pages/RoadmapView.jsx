@@ -18,6 +18,7 @@ const RoadmapView = () => {
   const [roadmap, setRoadmap] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [progress, setProgress] = useState({});
 
   useEffect(() => {
     if (token) {
@@ -49,6 +50,7 @@ const RoadmapView = () => {
 
       const data = await response.json();
       setRoadmap(data);
+      setProgress(data.progress || {});
     } catch (err) {
       setError(err.message);
       toast.error('Failed to load roadmap');
@@ -99,6 +101,49 @@ const RoadmapView = () => {
   const handleShare = () => {
     navigator.clipboard. writeText(window.location.href);
     toast.success('Link copied to clipboard!  📋');
+  };
+
+  const handleToggleTask = async (milestoneIndex, taskIndex) => {
+    try {
+      // Optimistically update UI
+      const currentProgress = { ...progress };
+      const milestoneKey = milestoneIndex.toString();
+      const completedTasks = currentProgress[milestoneKey] || [];
+      const isCompleted = completedTasks.includes(taskIndex);
+      
+      if (isCompleted) {
+        currentProgress[milestoneKey] = completedTasks.filter(t => t !== taskIndex);
+      } else {
+        currentProgress[milestoneKey] = [...completedTasks, taskIndex];
+      }
+      
+      setProgress(currentProgress);
+      
+      // Send update to backend
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roadmap/${id}/progress`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          milestoneIndex,
+          taskIndex,
+          completed: !isCompleted
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update progress');
+      }
+      
+      const data = await response.json();
+      setProgress(data.progress || currentProgress);
+    } catch (err) {
+      toast.error('Failed to update progress');
+      // Revert optimistic update on error
+      fetchRoadmap();
+    }
   };
 
   if (loading) {
@@ -229,6 +274,22 @@ const RoadmapView = () => {
                   <p>{roadmap.learningStyle}</p>
                 </div>
               </div>
+              <div className="info-box">
+                <div className="progress-icon">
+                  {(() => {
+                    const totalTasks = roadmap.roadmapData?.milestones?.reduce((sum, m) => sum + (m.tasks?.length || 0), 0) || 0;
+                    const completedTasks = Object.values(progress).reduce((sum, tasks) => sum + tasks.length, 0);
+                    const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                    return <span className="percentage-badge">{percentage}%</span>;
+                  })()}
+                </div>
+                <div>
+                  <label>Overall Progress</label>
+                  <p>
+                    {Object.values(progress).reduce((sum, tasks) => sum + tasks.length, 0)} / {roadmap.roadmapData?.milestones?.reduce((sum, m) => sum + (m.tasks?.length || 0), 0) || 0} tasks
+                  </p>
+                </div>
+              </div>
             </div>
           </Card>
         </motion.div>
@@ -244,6 +305,9 @@ const RoadmapView = () => {
             isLoading={false}
             onPrevious={() => navigate('/dashboard')}
             viewMode={true}
+            progress={progress}
+            onToggleTask={handleToggleTask}
+            roadmapId={id}
           />
         </motion.div>
       </div>
