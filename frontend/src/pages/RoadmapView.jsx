@@ -99,8 +99,8 @@ const RoadmapView = () => {
   };
 
   const handleShare = () => {
-    navigator.clipboard. writeText(window.location.href);
-    toast.success('Link copied to clipboard!  📋');
+    navigator.clipboard.writeText(window.location.href);
+    toast.success('Link copied to clipboard! 📋');
   };
 
   const handleToggleTask = async (milestoneIndex, taskIndex) => {
