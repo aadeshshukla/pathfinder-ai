@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+
+  backend:
+    build: ./backend
+    container_name: pathfinder-backend
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api
+    container_name: pathfinder-frontend
+    depends_on:
+      - backend
+    # No ports exposed; served by nginx
+    volumes:
+      - frontend-dist:/app/dist
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: pathfinder-nginx
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - frontend-dist:/usr/share/nginx/html
+
+volumes:
+  frontend-dist:
