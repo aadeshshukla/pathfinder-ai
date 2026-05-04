@@ -41,7 +41,7 @@
 
 ## 🌟 About The Project
 
-**Pathfinder AI** is an intelligent learning roadmap generator that creates personalized, AI-powered learning paths tailored to your goals, skill level, and learning preferences. Whether you're a beginner starting your coding journey or an experienced developer exploring new technologies, Pathfinder AI provides structured, actionable roadmaps to guide your learning.
+**Pathfinder AI** is an intelligent learning roadmap generator that creates personalized, AI-powered learning paths tailored to your goals, skill level, and learning preferences. Whether you're a beginner starting your coding journey or an experienced developer exploring new technologies, Pathfinder AI provides structured, actionable roadmaps to guide your learning. it also provides best sources to achive the goal 
 
 ### Why Pathfinder AI?
 
