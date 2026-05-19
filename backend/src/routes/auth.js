@@ -162,10 +162,12 @@ router.post('/reset-password', passwordResetLimiter, async (req, res) => {
 
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    const user = await User.findOne({
-      resetPasswordToken: hashedToken,
+    const candidateUsers = await User.find({
+      resetPasswordToken: { $ne: null },
       resetPasswordExpiresAt: { $gt: new Date() }
     });
+
+    const user = candidateUsers.find((candidate) => candidate.resetPasswordToken === hashedToken);
 
     if (!user) {
       return res.status(400).json({ error: 'Reset token is invalid or has expired' });
