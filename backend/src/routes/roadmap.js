@@ -33,7 +33,7 @@ router.post('/', roadmapGenerationLimiter, authenticateOptional, async (req, res
       const roadmap = new Roadmap({
         userId: req.userId,
         title: userInput.goal,
-        goal: userInput. goal,
+        goal: userInput.goal,
         skillLevel: userInput.skillLevel,
         timeCommitment: userInput.timeCommitment,
         learningStyle: userInput.learningStyle,

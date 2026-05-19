@@ -15,13 +15,22 @@ const passwordResetLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many password reset attempts. Please try again later.' }
 });
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const normalizeEmail = (value) => (typeof value === 'string' ? value.trim().toLowerCase() : '');
+const isValidEmail = (value) => {
+  if (!value || value.length > 254 || value.includes(' ')) return false;
+  const atIndex = value.indexOf('@');
+  if (atIndex <= 0 || atIndex !== value.lastIndexOf('@') || atIndex === value.length - 1) return false;
+  const domain = value.slice(atIndex + 1);
+  return domain.includes('.') && !domain.startsWith('.') && !domain.endsWith('.');
+};
 
 const buildResetLink = (token) => `${config.frontendURL}/reset-password?token=${token}`;
 
 const sendPasswordResetEmail = async (email) => {
   // Stub implementation: integrate your email provider (e.g. SES/SendGrid) in production.
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('Password reset email provider is not configured. Add an email integration to deliver reset links.');
+  } else {
     console.info(`Password reset requested for ${email}.`);
   }
 };
@@ -114,9 +123,9 @@ router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
   try {
     const message = 'If that email is registered, a password reset link has been sent.';
     const { email } = req.body;
-    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const normalizedEmail = normalizeEmail(email);
 
-    if (!EMAIL_REGEX.test(normalizedEmail)) {
+    if (!isValidEmail(normalizedEmail)) {
       return res.json({ message });
     }
 
@@ -154,7 +163,7 @@ router.post('/reset-password', passwordResetLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Token and password are required' });
     }
 
-    if (!/^[a-f0-9]{64}$/i.test(token)) {
+    if (!/^[a-f0-9]{64}$/.test(token)) {
       return res.status(400).json({ error: 'Reset token is invalid or has expired' });
     }
 
@@ -164,12 +173,10 @@ router.post('/reset-password', passwordResetLimiter, async (req, res) => {
 
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    const candidateUsers = await User.find({
-      resetPasswordToken: { $ne: null },
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
       resetPasswordExpiresAt: { $gt: new Date() }
     });
-
-    const user = candidateUsers.find((candidate) => candidate.resetPasswordToken === hashedToken);
 
     if (!user) {
       return res.status(400).json({ error: 'Reset token is invalid or has expired' });

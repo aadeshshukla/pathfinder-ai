@@ -108,7 +108,7 @@ const Landing = () => {
                 Continue as Guest
               </Button>
             </div>
-          </motion. div>
+          </motion.div>
 
           <motion.div 
             className="hero-image"
