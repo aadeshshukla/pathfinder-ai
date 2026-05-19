@@ -58,11 +58,24 @@
 
 ### 🎓 Core Features
 - **AI Roadmap Generation**: Create personalized learning roadmaps using advanced AI
+- **Continue as Guest**: Use roadmap generation without creating an account (temporary, non-saved session)
 - **User Authentication**:  Secure registration and login with JWT tokens
+- **Password Reset**: Request secure, time-limited reset links to update forgotten passwords
 - **Dashboard**: View all your saved roadmaps at a glance
 - **My Roadmaps**:  Dedicated page to manage and organize your learning paths
 - **Roadmap Details**: View comprehensive breakdown of each learning phase
 - **User Profile**: Manage your account settings and preferences
+
+### 👤 Guest Mode Notes
+- Guests can generate and view roadmaps in the create flow without authentication.
+- Guest-generated roadmaps are **not saved** to a user account or database.
+- Account-specific pages (Dashboard, My Roadmaps, Profile, saved roadmap detail pages) remain protected.
+- The UI prompts guests to sign up or log in when they want persistent/saved features.
+
+### 🔐 Password Reset Flow
+- Use **Forgot password?** on the login page to request a reset link.
+- Reset tokens are securely generated, expire after a limited time, and are single-use.
+- Passwords are never logged and are stored hashed using `bcryptjs`.
 
 ### 🛠️ Technical Features
 - **Real-time Generation**: Live roadmap creation with loading states

@@ -1,13 +1,21 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { generateRoadmap } from '../ai/modelAdapter.js';
 import { parseRoadmapJSON } from '../ai/parse.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, authenticateOptional } from '../middleware/auth.js';
 import Roadmap from '../models/Roadmap.js';
 
 const router = Router();
+const roadmapGenerationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many roadmap requests. Please try again later.' }
+});
 
-// Generate roadmap (protected route)
-router.post('/', authenticate, async (req, res) => {
+// Generate roadmap (authenticated users are saved, guests are temporary)
+router.post('/', roadmapGenerationLimiter, authenticateOptional, async (req, res) => {
   try {
     const userInput = req.body;
     if (!userInput) {
@@ -20,23 +28,30 @@ router.post('/', authenticate, async (req, res) => {
     // 2. Parse the string into a clean JavaScript object
     const roadmapJson = parseRoadmapJSON(roadmapText);
 
-    // 3. Save to database
-    const roadmap = new Roadmap({
-      userId: req.userId,
-      title: userInput.goal,
-      goal: userInput. goal,
-      skillLevel: userInput.skillLevel,
-      timeCommitment: userInput.timeCommitment,
-      learningStyle: userInput.learningStyle,
-      roadmapData: roadmapJson
-    });
+    // 3. Save only for authenticated users
+    if (req.userId) {
+      const roadmap = new Roadmap({
+        userId: req.userId,
+        title: userInput.goal,
+        goal: userInput.goal,
+        skillLevel: userInput.skillLevel,
+        timeCommitment: userInput.timeCommitment,
+        learningStyle: userInput.learningStyle,
+        roadmapData: roadmapJson
+      });
 
-    await roadmap.save();
+      await roadmap.save();
 
-    // 4. Send response with roadmap ID
+      return res.json({
+        ...roadmapJson,
+        roadmapId: roadmap._id
+      });
+    }
+
+    // 4. Guest response (non-persistent)
     res.json({
-      ... roadmapJson,
-      roadmapId: roadmap._id
+      ...roadmapJson,
+      guestMode: true
     });
 
   } catch (error) {

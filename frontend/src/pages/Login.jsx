@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, continueAsGuest } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -78,6 +78,9 @@ const Login = () => {
                 required
                 minLength="6"
               />
+              <div style={{ marginTop: '0.5rem' }}>
+                <Link to="/forgot-password">Forgot password?</Link>
+              </div>
             </div>
 
             <Button 
@@ -88,6 +91,18 @@ const Login = () => {
               icon={<FiArrowRight />}
             >
               Log In
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              fullWidth
+              size="lg"
+              onClick={() => {
+                continueAsGuest();
+                navigate('/create');
+              }}
+            >
+              Continue as Guest
             </Button>
           </form>
 
