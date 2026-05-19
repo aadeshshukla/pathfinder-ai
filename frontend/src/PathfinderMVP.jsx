@@ -12,7 +12,7 @@ import StepFour from './components/StepFour';
 import './components/PathfinderMVP.css';
 
 const PathfinderMVP = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, isGuest } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -37,7 +37,7 @@ const PathfinderMVP = () => {
   
   const handlePrevious = () => {
     if (currentStep === 4) {
-      navigate('/dashboard');
+      navigate(isGuest ? '/create' : '/dashboard');
     } else {
       setCurrentStep((prev) => prev - 1);
     }
@@ -52,15 +52,17 @@ const PathfinderMVP = () => {
       const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/roadmap`;
       const response = await fetch(apiUrl, {
         method:  'POST',
-        headers:  {
+        headers:  token ? {
           'Content-Type':  'application/json',
           'Authorization': `Bearer ${token}`
+        } : {
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 && token) {
           logout();
           navigate('/login');
           return;
@@ -73,6 +75,9 @@ const PathfinderMVP = () => {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
       toast.success('Roadmap created successfully!  🎉');
+      if (isGuest) {
+        toast.info('You are in guest mode. Create an account to save this roadmap.');
+      }
       
     } catch (e) {
       console.error('API Call Failed:', e);
@@ -163,10 +168,10 @@ const PathfinderMVP = () => {
               <div className="step-actions">
                 <Button 
                   variant="secondary"
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate(isGuest ? '/' : '/dashboard')}
                   icon={<FiArrowLeft />}
                 >
-                  Back to Dashboard
+                  {isGuest ? 'Back to Home' : 'Back to Dashboard'}
                 </Button>
                 <Button 
                   onClick={handleNext} 
@@ -368,6 +373,15 @@ const PathfinderMVP = () => {
       <Navbar />
       
       <div className="pathfinder-content">
+        {isGuest && (
+          <Card style={{ marginBottom: '1rem' }}>
+            <p><strong>Guest Mode:</strong> Your roadmap is temporary and won&apos;t be saved to an account.</p>
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+              <Button size="sm" onClick={() => navigate('/register')}>Create Account to Save</Button>
+              <Button size="sm" variant="ghost" onClick={() => navigate('/login')}>Already have an account? Log in</Button>
+            </div>
+          </Card>
+        )}
         {currentStep < 4 && (
           <div className="progress-section">
             <div className="progress-steps">
@@ -401,5 +415,3 @@ const PathfinderMVP = () => {
 };
 
 export default PathfinderMVP;
-
-

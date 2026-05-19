@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { FiArrowRight, FiZap, FiTarget, FiTrendingUp, FiCheckCircle } from 'react-icons/fi';
 import Button from '../components/ui/Button';
 import logo from '../assets/pathfinder-logo.png';
+import { useAuth } from '../context/AuthContext';
 import './Landing.css';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { continueAsGuest } = useAuth();
 
   const features = [
     {
@@ -94,6 +96,16 @@ const Landing = () => {
                 onClick={() => navigate('/login')}
               >
                 Sign In
+              </Button>
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={() => {
+                  continueAsGuest();
+                  navigate('/create');
+                }}
+              >
+                Continue as Guest
               </Button>
             </div>
           </motion. div>

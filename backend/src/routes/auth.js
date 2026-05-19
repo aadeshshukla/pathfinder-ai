@@ -1,10 +1,20 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/Users.js';
 import config from '../config.js';
 import { authenticate } from '../middleware/auth.js';
 
 const router = Router();
+const PASSWORD_RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+
+const buildResetLink = (token) => `${config.frontendURL}/reset-password?token=${token}`;
+
+const sendPasswordResetEmail = async (email, _resetLink) => {
+  if (process.env.NODE_ENV !== 'production') {
+    console.info(`Password reset requested for ${email}.`);
+  }
+};
 
 // Register
 router.post('/register', async (req, res) => {
@@ -87,6 +97,76 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email });
+    const message = 'If that email is registered, a password reset link has been sent.';
+
+    if (!user) {
+      return res.json({ message });
+    }
+
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpiresAt = new Date(Date.now() + PASSWORD_RESET_TOKEN_TTL_MS);
+    await user.save();
+
+    const resetLink = buildResetLink(rawToken);
+    await sendPasswordResetEmail(user.email, resetLink);
+
+    return res.json({
+      message,
+      ...(process.env.NODE_ENV !== 'production' && { resetLink })
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Failed to process password reset request' });
+  }
+});
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ error: 'Token and password are required' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpiresAt: { $gt: new Date() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ error: 'Reset token is invalid or has expired' });
+    }
+
+    user.password = password;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpiresAt = null;
+    await user.save();
+
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Failed to reset password' });
   }
 });
 

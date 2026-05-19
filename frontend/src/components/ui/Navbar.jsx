@@ -7,7 +7,7 @@ import logo from '../../assets/pathfinder-logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isGuest } = useAuth();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -17,17 +17,19 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  const navLinks = [
-    { to: '/dashboard', icon: <FiHome />, label: 'Dashboard' },
-    { to: '/create', icon: <FiPlusCircle />, label: 'Create Roadmap' },
-    { to: '/my-roadmaps', icon: <FiList />, label: 'My Roadmaps' },
-  ];
+  const navLinks = isGuest
+    ? [{ to: '/create', icon: <FiPlusCircle />, label: 'Create Roadmap' }]
+    : [
+        { to: '/dashboard', icon: <FiHome />, label: 'Dashboard' },
+        { to: '/create', icon: <FiPlusCircle />, label: 'Create Roadmap' },
+        { to: '/my-roadmaps', icon: <FiList />, label: 'My Roadmaps' },
+      ];
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo */}
-        <Link to="/dashboard" className="navbar-brand">
+        <Link to={isGuest ? '/create' : '/dashboard'} className="navbar-brand">
           <img src={logo} alt="Pathfinder AI" className="navbar-logo" />
           <div className="navbar-brand-text">
             <h1>Pathfinder AI</h1>
@@ -51,33 +53,42 @@ const Navbar = () => {
 
         {/* User Menu */}
         <div className="navbar-user">
-          <button 
-            className="user-menu-trigger"
-            onClick={() => setShowUserMenu(!showUserMenu)}
-          >
-            <div className="user-avatar">
-              {user?.username?. charAt(0).toUpperCase()}
+          {isGuest ? (
+            <div className="user-menu-trigger">
+              <div className="user-avatar">G</div>
+              <span className="user-name">Guest Mode</span>
             </div>
-            <span className="user-name">{user?. username}</span>
-          </button>
-
-          <AnimatePresence>
-            {showUserMenu && (
-              <motion.div
-                className="user-dropdown"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+          ) : (
+            <>
+              <button 
+                className="user-menu-trigger"
+                onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <Link to="/profile" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
-                  <FiUser /> Profile
-                </Link>
-                <button className="dropdown-item" onClick={handleLogout}>
-                  <FiLogOut /> Logout
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <div className="user-avatar">
+                  {user?.username?. charAt(0).toUpperCase()}
+                </div>
+                <span className="user-name">{user?. username}</span>
+              </button>
+
+              <AnimatePresence>
+                {showUserMenu && (
+                  <motion.div
+                    className="user-dropdown"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <Link to="/profile" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
+                      <FiUser /> Profile
+                    </Link>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      <FiLogOut /> Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -109,10 +120,31 @@ const Navbar = () => {
                 <span>{link.label}</span>
               </NavLink>
             ))}
-            <button className="mobile-menu-link" onClick={handleLogout}>
-              <FiLogOut />
-              <span>Logout</span>
-            </button>
+            {isGuest ? (
+              <>
+                <NavLink
+                  to="/register"
+                  className="mobile-menu-link"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <FiUser />
+                  <span>Create Account</span>
+                </NavLink>
+                <NavLink
+                  to="/login"
+                  className="mobile-menu-link"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <FiUser />
+                  <span>Log In</span>
+                </NavLink>
+              </>
+            ) : (
+              <button className="mobile-menu-link" onClick={handleLogout}>
+                <FiLogOut />
+                <span>Logout</span>
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

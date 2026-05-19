@@ -9,6 +9,8 @@ import Skeleton from './components/ui/Skeleton';
 const Landing = lazy(() => import('./pages/Landing'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const PathfinderMVP = lazy(() => import('./PathfinderMVP'));
 const RoadmapView = lazy(() => import('./pages/RoadmapView'));
@@ -26,6 +28,8 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             
             {/* Protected Routes */}
             <Route path="/dashboard" element={
@@ -35,7 +39,7 @@ function App() {
             } />
             
             <Route path="/create" element={
-              <ProtectedRoute>
+              <ProtectedRoute allowGuest>
                 <PathfinderMVP />
               </ProtectedRoute>
             } />
@@ -68,4 +72,3 @@ function App() {
 }
 
 export default App;
-
