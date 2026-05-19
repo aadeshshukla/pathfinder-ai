@@ -1,13 +1,21 @@
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { generateRoadmap } from '../ai/modelAdapter.js';
 import { parseRoadmapJSON } from '../ai/parse.js';
 import { authenticate, authenticateOptional } from '../middleware/auth.js';
 import Roadmap from '../models/Roadmap.js';
 
 const router = Router();
+const roadmapGenerationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many roadmap requests. Please try again later.' }
+});
 
 // Generate roadmap (authenticated users are saved, guests are temporary)
-router.post('/', authenticateOptional, async (req, res) => {
+router.post('/', roadmapGenerationLimiter, authenticateOptional, async (req, res) => {
   try {
     const userInput = req.body;
     if (!userInput) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiPlusCircle, FiList, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import { FiHome, FiPlusCircle, FiList, FiUser, FiLogOut, FiMenu, FiX, FiLogIn } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import logo from '../../assets/pathfinder-logo.png';
 import './Navbar.css';
@@ -135,7 +135,7 @@ const Navbar = () => {
                   className="mobile-menu-link"
                   onClick={() => setShowMobileMenu(false)}
                 >
-                  <FiUser />
+                  <FiLogIn />
                   <span>Log In</span>
                 </NavLink>
               </>

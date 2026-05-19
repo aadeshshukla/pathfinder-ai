@@ -54,7 +54,9 @@ export const authenticateOptional = async (req, res, next) => {
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    console.error('Optional authentication error:', error);
-    res.status(401).json({ error: 'Invalid or expired token' });
+    console.warn('Optional authentication failed, continuing as guest.');
+    req.user = null;
+    req.userId = null;
+    next();
   }
 };

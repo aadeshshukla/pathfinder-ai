@@ -59,7 +59,7 @@ const ForgotPassword = () => {
             </Button>
           </form>
 
-          {devResetLink && (
+          {devResetLink && import.meta.env.DEV && (
             <p style={{ marginTop: '0.75rem', wordBreak: 'break-all' }}>
               Dev reset link: <a href={devResetLink}>{devResetLink}</a>
             </p>

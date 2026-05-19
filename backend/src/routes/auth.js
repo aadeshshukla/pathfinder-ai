@@ -1,16 +1,25 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import rateLimit from 'express-rate-limit';
 import User from '../models/Users.js';
 import config from '../config.js';
 import { authenticate } from '../middleware/auth.js';
 
 const router = Router();
 const PASSWORD_RESET_TOKEN_TTL_MS = 60 * 60 * 1000;
+const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many password reset attempts. Please try again later.' }
+});
 
 const buildResetLink = (token) => `${config.frontendURL}/reset-password?token=${token}`;
 
 const sendPasswordResetEmail = async (email, _resetLink) => {
+  // Stub implementation: integrate your email provider (e.g. SES/SendGrid) in production.
   if (process.env.NODE_ENV !== 'production') {
     console.info(`Password reset requested for ${email}.`);
   }
@@ -100,7 +109,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -135,12 +144,16 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-router.post('/reset-password', async (req, res) => {
+router.post('/reset-password', passwordResetLimiter, async (req, res) => {
   try {
     const { token, password } = req.body;
 
     if (!token || !password) {
       return res.status(400).json({ error: 'Token and password are required' });
+    }
+
+    if (!/^[a-f0-9]{64}$/i.test(token)) {
+      return res.status(400).json({ error: 'Reset token is invalid or has expired' });
     }
 
     if (password.length < 6) {
