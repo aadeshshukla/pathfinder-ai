@@ -15,10 +15,11 @@ const passwordResetLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many password reset attempts. Please try again later.' }
 });
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const buildResetLink = (token) => `${config.frontendURL}/reset-password?token=${token}`;
 
-const sendPasswordResetEmail = async (email, _resetLink) => {
+const sendPasswordResetEmail = async (email) => {
   // Stub implementation: integrate your email provider (e.g. SES/SendGrid) in production.
   if (process.env.NODE_ENV !== 'production') {
     console.info(`Password reset requested for ${email}.`);
@@ -111,14 +112,15 @@ router.post('/login', async (req, res) => {
 
 router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
   try {
+    const message = 'If that email is registered, a password reset link has been sent.';
     const { email } = req.body;
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      return res.json({ message });
     }
 
-    const user = await User.findOne({ email });
-    const message = 'If that email is registered, a password reset link has been sent.';
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
       return res.json({ message });
@@ -132,7 +134,7 @@ router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
     await user.save();
 
     const resetLink = buildResetLink(rawToken);
-    await sendPasswordResetEmail(user.email, resetLink);
+    await sendPasswordResetEmail(user.email);
 
     return res.json({
       message,
