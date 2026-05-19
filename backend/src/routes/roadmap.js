@@ -43,7 +43,7 @@ router.post('/', roadmapGenerationLimiter, authenticateOptional, async (req, res
       await roadmap.save();
 
       return res.json({
-        ... roadmapJson,
+        ...roadmapJson,
         roadmapId: roadmap._id
       });
     }
