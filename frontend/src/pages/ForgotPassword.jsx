@@ -10,7 +10,8 @@ import './Auth.css';
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [devResetLink, setDevResetLink] = useState('');
+  const [resetLink, setResetLink] = useState('');
+  const [resetLinkNotice, setResetLinkNotice] = useState('');
   const { requestPasswordReset } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -20,7 +21,12 @@ const ForgotPassword = () => {
     try {
       const data = await requestPasswordReset(email);
       if (data.resetLink) {
-        setDevResetLink(data.resetLink);
+        setResetLink(data.resetLink);
+        setResetLinkNotice(
+          data.fallback
+            ? 'Email delivery is not configured on this server, so use the reset link below.'
+            : 'If email delivery is configured, check your inbox for the reset link.'
+        );
       }
       toast.success(data.message || 'If that email exists, a reset link has been sent.');
     } catch (error) {
@@ -59,10 +65,13 @@ const ForgotPassword = () => {
             </Button>
           </form>
 
-          {devResetLink && import.meta.env.DEV && (
-            <p style={{ marginTop: '0.75rem', wordBreak: 'break-all' }}>
-              Dev reset link: <a href={devResetLink}>{devResetLink}</a>
-            </p>
+          {resetLink && (
+            <div style={{ marginTop: '0.75rem' }}>
+              {resetLinkNotice && <p>{resetLinkNotice}</p>}
+              <p style={{ wordBreak: 'break-all' }}>
+                Reset link: <a href={resetLink}>{resetLink}</a>
+              </p>
+            </div>
           )}
 
           <div className="auth-footer">

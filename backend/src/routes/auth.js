@@ -2,6 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import rateLimit from 'express-rate-limit';
+import nodemailer from 'nodemailer';
 import User from '../models/Users.js';
 import config from '../config.js';
 import { authenticate } from '../middleware/auth.js';
@@ -26,12 +27,49 @@ const isValidEmail = (value) => {
 
 const buildResetLink = (token) => `${config.frontendURL}/reset-password?token=${token}`;
 
-const sendPasswordResetEmail = async (email) => {
-  // Stub implementation: integrate your email provider (e.g. SES/SendGrid) in production.
-  if (process.env.NODE_ENV === 'production') {
-    console.warn('Password reset email provider is not configured. Add an email integration to deliver reset links.');
-  } else {
-    console.info(`Password reset requested for ${email}.`);
+const createMailTransport = () => {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT;
+  const smtpService = process.env.SMTP_SERVICE;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+
+  if (!smtpHost && !smtpService) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: smtpHost,
+    service: smtpService || undefined,
+    port: smtpPort ? Number(smtpPort) : 587,
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: smtpUser ? { user: smtpUser, pass: smtpPass } : undefined
+  });
+};
+
+const sendPasswordResetEmail = async (email, resetLink) => {
+  const transporter = createMailTransport();
+
+  if (!transporter) {
+    console.warn('Password reset email provider is not configured. Falling back to an in-app reset link.');
+    return false;
+  }
+
+  const fromAddress = process.env.SMTP_FROM || process.env.MAIL_FROM || process.env.EMAIL_FROM || process.env.SMTP_USER || 'no-reply@pathfinder-ai.local';
+
+  try {
+    await transporter.sendMail({
+      from: fromAddress,
+      to: email,
+      subject: 'Reset your Pathfinder AI password',
+      text: `Reset your password using this link: ${resetLink}\n\nThis link expires in 1 hour and can only be used once.`,
+      html: `<p>Reset your password using this link:</p><p><a href="${resetLink}">${resetLink}</a></p><p>This link expires in 1 hour and can only be used once.</p>`
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Password reset email delivery failed:', error);
+    return false;
   }
 };
 
@@ -143,11 +181,11 @@ router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
     await user.save();
 
     const resetLink = buildResetLink(rawToken);
-    await sendPasswordResetEmail(user.email);
+    const emailDelivered = await sendPasswordResetEmail(user.email, resetLink);
 
     return res.json({
       message,
-      ...(process.env.NODE_ENV !== 'production' && { resetLink })
+      ...(emailDelivered ? {} : { resetLink, fallback: true })
     });
   } catch (error) {
     console.error('Forgot password error:', error);

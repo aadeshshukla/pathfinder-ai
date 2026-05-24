@@ -9,38 +9,53 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let cancelled = false;
 
-  const fetchUser = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+    const fetchUser = async (authToken) => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+
+        if (cancelled) {
+          return;
         }
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      } else {
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
+        }
+      } catch {
+        if (cancelled) {
+          return;
+        }
+
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
-    } catch {
-      localStorage.removeItem('token');
-      setToken(null);
-      setUser(null);
-    } finally {
+    };
+
+    if (token) {
+      fetchUser(token);
+    } else {
       setLoading(false);
     }
-  };
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   const login = async (email, password) => {
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, allowGuest = false }) => {
   const { isAuthenticated, isGuest, loading } = useAuth();
+  const persistedGuestMode = typeof window !== 'undefined' && localStorage.getItem('guestMode') === 'true';
 
   if (loading) {
     return (
@@ -19,7 +20,7 @@ const ProtectedRoute = ({ children, allowGuest = false }) => {
     );
   }
 
-  return isAuthenticated || (allowGuest && isGuest) ? children : <Navigate to="/login" replace />;
+  return isAuthenticated || (allowGuest && (isGuest || persistedGuestMode)) ? children : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
