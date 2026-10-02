@@ -78,7 +78,7 @@ const Login = () => {
                 required
                 minLength="6"
               />
-              <div className="auth-link-row">
+              <div style={{ marginTop: '0.5rem' }}>
                 <Link to="/forgot-password">Forgot password?</Link>
               </div>
             </div>

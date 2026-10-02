@@ -8,9 +8,14 @@ const ProtectedRoute = ({ children, allowGuest = false }) => {
 
   if (loading) {
     return (
-      <div className="protected-route-loading" aria-live="polite">
-        <div className="spinner" aria-hidden="true"></div>
-        <p>Loading your session...</p>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        fontSize: '1.5rem'
+      }}>
+        Loading...
       </div>
     );
   }

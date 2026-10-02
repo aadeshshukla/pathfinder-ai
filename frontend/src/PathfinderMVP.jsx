@@ -374,9 +374,9 @@ const PathfinderMVP = () => {
       
       <div className="pathfinder-content">
         {isGuest && (
-          <Card className="guest-mode-card">
+          <Card style={{ marginBottom: '1rem' }}>
             <p><strong>Guest Mode:</strong> Your roadmap is temporary and won&apos;t be saved to an account.</p>
-            <div className="guest-mode-actions">
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
               <Button size="sm" onClick={() => navigate('/register')}>Create Account to Save</Button>
               <Button size="sm" variant="ghost" onClick={() => navigate('/login')}>Already have an account? Log in</Button>
             </div>

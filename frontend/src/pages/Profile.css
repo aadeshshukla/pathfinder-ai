@@ -1,6 +1,6 @@
 .profile-page {
     min-height:  100vh;
-    background:  linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-tertiary) 100%);
+    background:  linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }
   
   .profile-container {
@@ -11,7 +11,7 @@
   
   .page-title {
     font-size: 2.5rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin:  0 0 40px 0;
     font-weight: 700;
   }
@@ -39,7 +39,7 @@
     width: 100px;
     height: 100px;
     border-radius:  50%;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,22 +51,22 @@
   
   .profile-header h2 {
     font-size: 1.875rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin:  0 0 6px 0;
     font-weight: 700;
   }
   
   .profile-header p {
     font-size: 1rem;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     margin:  0;
   }
   
   .profile-stats {
     padding: 24px;
-    background: var(--color-bg-primary);
+    background: #0f172a;
     border-radius: 12px;
-    border: 1px solid var(--color-border);
+    border: 1px solid #334155;
   }
   
   .stat-item {
@@ -77,13 +77,13 @@
   
   .stat-item svg {
     font-size: 1.5rem;
-    color: var(--color-primary);
+    color: #6366f1;
   }
   
   .stat-item label {
     display: block;
     font-size: 0.813rem;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     margin-bottom: 4px;
     font-weight: 600;
     text-transform: uppercase;
@@ -92,7 +92,7 @@
   
   .stat-item p {
     font-size: 1rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin: 0;
     font-weight: 500;
   }
@@ -105,7 +105,7 @@
   /* Details Card */
   .details-card h3 {
     font-size: 1.5rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin: 0 0 24px 0;
     font-weight: 700;
   }
@@ -118,7 +118,7 @@
   
   .detail-item {
     padding-bottom: 24px;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid #334155;
   }
   
   .detail-item:last-child {
@@ -131,7 +131,7 @@
     align-items: center;
     gap: 8px;
     font-size: 0.875rem;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     margin-bottom: 8px;
     font-weight: 600;
   }
@@ -142,7 +142,7 @@
   
   .detail-item p {
     font-size: 1. 125rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin: 0;
     font-weight: 500;
   }
@@ -165,29 +165,29 @@
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    color:  var(--color-text-secondary);
+    color:  #cbd5e1;
     font-size: 0.95rem;
   }
   
   .form-fields label svg {
     font-size:  1.1rem;
-    color: var(--color-primary);
+    color: #6366f1;
   }
   
   .form-fields input {
     padding: 14px 18px;
-    background: var(--color-bg-primary);
-    border: 2px solid var(--color-border);
+    background: #0f172a;
+    border: 2px solid #334155;
     border-radius: 12px;
     font-size: 1rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     transition: all 0.3s ease;
     font-family: inherit;
   }
   
   .form-fields input:focus {
     outline:  none;
-    border-color:  var(--color-primary);
+    border-color:  #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   }
   
@@ -214,15 +214,3 @@
       flex-direction: column;
     }
   }
-.profile-grid > .card,
-.profile-stats,
-.form-fields input {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm), var(--shadow-inner);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.profile-avatar-large {
-  box-shadow: var(--shadow-glow);
-}
