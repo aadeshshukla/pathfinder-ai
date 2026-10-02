@@ -1,6 +1,6 @@
 .my-roadmaps-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-tertiary) 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }
   
   .my-roadmaps-container {
@@ -20,14 +20,14 @@
   
   .page-header h1 {
     font-size: 2.5rem;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     margin: 0;
     font-weight:  700;
   }
   
   .page-header p {
     font-size: 1.125rem;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     margin: 8px 0 0 0;
   }
   
@@ -51,8 +51,8 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: var(--color-bg-tertiary);
-    border:  2px solid var(--color-border);
+    background: #1e293b;
+    border:  2px solid #334155;
     border-radius: 12px;
     padding: 12px 20px;
     flex:  1;
@@ -60,18 +60,18 @@
   }
   
   .search-box-large:focus-within {
-    border-color: var(--color-primary);
+    border-color: #6366f1;
   }
   
   .search-box-large svg {
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     font-size: 1.25rem;
   }
   
   .search-box-large input {
     background: transparent;
     border: none;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     font-size: 1rem;
     outline: none;
     width: 100%;
@@ -79,15 +79,15 @@
   }
   
   .search-box-large input::placeholder {
-    color: var(--color-text-tertiary);
+    color: #64748b;
   }
   
   .filter-select {
     padding: 12px 20px;
-    background: var(--color-bg-tertiary);
-    border:  2px solid var(--color-border);
+    background: #1e293b;
+    border:  2px solid #334155;
     border-radius: 12px;
-    color: var(--color-text-primary);
+    color: #f8fafc;
     font-size: 1rem;
     font-family: inherit;
     cursor: pointer;
@@ -96,28 +96,28 @@
   }
   
   .filter-select:hover {
-    border-color: var(--color-border-strong);
+    border-color: #475569;
   }
   
   .filter-select:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: #6366f1;
   }
   
   .view-toggle-large {
     display: flex;
     gap: 8px;
-    background: var(--color-bg-tertiary);
+    background: #1e293b;
     padding: 6px;
     border-radius: 12px;
-    border: 1px solid var(--color-border);
+    border: 1px solid #334155;
   }
   
   .view-toggle-large button {
     padding: 10px 20px;
     background: transparent;
     border: none;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -130,11 +130,11 @@
   }
   
   .view-toggle-large button:hover {
-    color: var(--color-text-primary);
+    color: #f8fafc;
   }
   
   .view-toggle-large button.active {
-    background: var(--color-primary);
+    background: #6366f1;
     color: white;
   }
   
@@ -145,14 +145,14 @@
     align-items: center;
     justify-content: center;
     padding: 100px 20px;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
   }
   
   .spinner {
     width: 48px;
     height: 48px;
-    border: 4px solid var(--color-border);
-    border-top-color: var(--color-primary);
+    border: 4px solid #334155;
+    border-top-color: #6366f1;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-bottom: 20px;
@@ -161,9 +161,9 @@
   .empty-state-large {
     text-align: center;
     padding: 100px 20px;
-    background: var(--color-surface);
+    background: rgba(30, 41, 59, 0.5);
     border-radius: 20px;
-    border: 2px dashed var(--color-border);
+    border: 2px dashed #334155;
   }
   
   .empty-icon {
@@ -174,13 +174,13 @@
   .empty-state-large h3 {
     font-size: 1.875rem;
     margin:  0 0 12px 0;
-    color:  var(--color-text-primary);
+    color:  #f8fafc;
   }
   
   .empty-state-large p {
     font-size: 1.25rem;
     margin: 0 0 32px 0;
-    color:  var(--color-text-tertiary);
+    color:  #94a3b8;
   }
   
   /* Roadmap Views */
@@ -212,7 +212,7 @@
   .roadmap-item-header h3 {
     font-size: 1.25rem;
     margin: 0;
-    color:  var(--color-text-primary);
+    color:  #f8fafc;
     font-weight: 600;
     flex:  1;
   }
@@ -221,7 +221,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    color: var(--color-text-tertiary);
+    color: #94a3b8;
     font-size: 0.938rem;
   }
   
@@ -229,7 +229,7 @@
     display: flex;
     gap: 8px;
     padding-top: 16px;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid #334155;
   }
   
   /* Responsive */
@@ -283,23 +283,3 @@
       width: 100%;
     }
   }
-.page-header,
-.controls-section,
-.empty-state-large,
-.roadmap-item,
-.search-box-large,
-.filter-select,
-.view-toggle-large {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm), var(--shadow-inner);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-}
-
-.search-box-large,
-.filter-select,
-.view-toggle-large {
-  border-radius: var(--radius-sm);
-}

@@ -74,9 +74,9 @@ const Dashboard = () => {
   );
 
   const stats = [
-    { label: 'Total Roadmaps', value: roadmaps.length, icon: <FiTarget />, tone: 'primary' },
-    { label: 'This Month', value: roadmaps.filter(r => new Date(r.createdAt).getMonth() === new Date().getMonth()).length, icon: <FiClock />, tone: 'success' },
-    { label: 'Skills Learning', value: new Set(roadmaps.map(r => r.skillLevel)).size, icon: <FiTrendingUp />, tone: 'warning' },
+    { label: 'Total Roadmaps', value: roadmaps.length, icon: <FiTarget />, color: '#6366f1' },
+    { label: 'This Month', value: roadmaps.filter(r => new Date(r.createdAt).getMonth() === new Date().getMonth()).length, icon: <FiClock />, color: '#10b981' },
+    { label: 'Skills Learning', value: new Set(roadmaps.map(r => r.skillLevel)).size, icon: <FiTrendingUp />, color: '#f59e0b' },
   ];
 
   return (
@@ -113,7 +113,7 @@ const Dashboard = () => {
               transition={{ delay: index * 0.1 }}
             >
               <Card className="stat-card">
-                <div className={`stat-icon stat-icon-${stat.tone}`}>
+                <div className="stat-icon" style={{ color: stat.color }}>
                   {stat.icon}
                 </div>
                 <div className="stat-content">

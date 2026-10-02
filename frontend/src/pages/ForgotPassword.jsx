@@ -66,9 +66,9 @@ const ForgotPassword = () => {
           </form>
 
           {resetLink && (
-            <div className="auth-reset-link">
+            <div style={{ marginTop: '0.75rem' }}>
               {resetLinkNotice && <p>{resetLinkNotice}</p>}
-              <p className="auth-reset-link-url">
+              <p style={{ wordBreak: 'break-all' }}>
                 Reset link: <a href={resetLink}>{resetLink}</a>
               </p>
             </div>
