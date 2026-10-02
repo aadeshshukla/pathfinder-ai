@@ -1,18 +1,20 @@
 :root {
-    --toastify-color-dark: #1e293b;
-    --toastify-color-success: #10b981;
-    --toastify-color-error: #ef4444;
-    --toastify-color-warning: #f59e0b;
-    --toastify-color-info:  #3b82f6;
-    --toastify-text-color-dark: #f8fafc;
-  }
-  
-  .Toastify__toast {
-    border-radius: 12px;
-    font-family: inherit;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  .Toastify__progress-bar {
-    height: 4px;
-  }
+  --toastify-color-dark: #212b3b;
+  --toastify-color-success: var(--color-success);
+  --toastify-color-error: var(--color-danger);
+  --toastify-color-warning: var(--color-warning);
+  --toastify-color-info: var(--color-info);
+  --toastify-text-color-dark: var(--color-text-primary);
+}
+
+.Toastify__toast {
+  border-radius: 14px;
+  font-family: inherit;
+  border: 1px solid var(--color-border);
+  background: linear-gradient(155deg, rgba(39, 49, 65, 0.95), rgba(31, 39, 52, 0.95));
+  box-shadow: var(--shadow-md), var(--shadow-inner);
+}
+
+.Toastify__progress-bar {
+  height: 4px;
+}

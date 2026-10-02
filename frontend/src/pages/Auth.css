@@ -1,7 +1,7 @@
 .auth-page {
   display: flex;
   min-height: 100vh;
-  background: #0f172a;
+  background: var(--color-bg-primary);
   overflow-x: hidden;
 }
 
@@ -43,13 +43,13 @@
 
 .auth-header h1 {
   font-size:  2rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   margin:  0 0 8px 0;
   font-weight: 700;
 }
 
 .auth-header p {
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -73,38 +73,38 @@
   align-items: center;
   gap: 6px;
   font-weight: 600;
-  color: #cbd5e1;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 }
 
 .form-group label svg {
   font-size: 1rem;
-  color: #6366f1;
+  color: var(--color-primary);
 }
 
 .form-group input {
   padding:  12px 14px;
-  background: #1e293b;
-  border: 2px solid #334155;
+  background: var(--color-bg-tertiary);
+  border: 2px solid var(--color-border);
   border-radius: 10px;
   font-size:  0.95rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   transition:  all 0.3s ease;
   font-family: inherit;
 }
 
 .form-group input:focus {
   outline:  none;
-  border-color:  #6366f1;
+  border-color:  var(--color-primary);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .form-group input::placeholder {
-  color: #64748b;
+  color: var(--color-text-tertiary);
 }
 
 .input-error {
-  color: #ef4444;
+  color: var(--color-danger);
   font-size: 0.813rem;
   display: flex;
   align-items: center;
@@ -129,11 +129,11 @@
 }
 
 .strength-indicator.valid {
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .strength-indicator.invalid {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 .strength-indicator svg {
@@ -144,31 +144,31 @@
 .auth-footer {
   text-align: center;
   padding-top: 16px;
-  border-top:  1px solid #334155;
+  border-top:  1px solid var(--color-border);
 }
 
 .auth-footer p {
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   margin: 0;
   font-size: 0.875rem;
 }
 
 .auth-footer a {
-  color: #6366f1;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .auth-footer a:hover {
-  color: #818cf8;
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
 /* Hero Section */
 .auth-hero-section {
   flex: 1;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(135deg, var(--color-bg-tertiary) 0%, var(--color-bg-primary) 100%);
   padding: 48px;
   display: flex;
   align-items: center;
@@ -185,7 +185,7 @@
 
 .auth-hero-content h2 {
   font-size: 2.5rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   margin: 0 0 16px 0;
   font-weight: 700;
   line-height: 1.2;
@@ -193,7 +193,7 @@
 
 .auth-hero-content > p {
   font-size: 1.125rem;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   margin: 0 0 40px 0;
   line-height: 1.6;
 }
@@ -218,14 +218,14 @@
 
 .feature-item h4 {
   font-size: 1.125rem;
-  color: #f8fafc;
+  color: var(--color-text-primary);
   margin: 0 0 6px 0;
   font-weight: 600;
 }
 
 .feature-item p {
   font-size: 0.938rem;
-  color: #94a3b8;
+  color: var(--color-text-tertiary);
   margin: 0;
   line-height: 1.5;
 }
@@ -245,7 +245,7 @@
 .shape {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(107, 160, 255, 0.08));
   animation: float 20s infinite ease-in-out;
 }
 
@@ -411,5 +411,44 @@
 
   .form-group input {
     padding:  10px 12px;
+  }
+}
+.auth-form-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), var(--shadow-inner);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 28px;
+}
+
+.auth-link-row {
+  margin-top: 0.5rem;
+}
+
+.auth-reset-link {
+  margin-top: 0.75rem;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.auth-reset-link-url {
+  word-break: break-all;
+}
+
+.auth-hero-section {
+  background: linear-gradient(160deg, rgba(22, 29, 41, 0.85), rgba(16, 23, 33, 0.9));
+}
+
+.shape {
+  background: linear-gradient(135deg, rgba(123, 134, 255, 0.12), rgba(96, 164, 255, 0.09));
+}
+
+@media (max-width: 640px) {
+  .auth-form-container {
+    padding: 22px 18px;
   }
 }
